@@ -55,7 +55,8 @@
     @include BoxShadow(color(sky), color(ink, lightest));
 
     &:hover {
-      @include BoxShadowHoverLeft(color(sky), color(ink, lighter));
+      @include BoxShadowHoverLeft(color(sky, dark), color(ink, lighter));
+      background: color(yellow, dark);
     }
   }
 
@@ -66,6 +67,7 @@
 
     &:hover {
       @include BoxShadowHoverRight(color(ink, lighter), color(ink, light));
+      background: color(purple, dark);
     }
   }
 }
