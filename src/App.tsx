@@ -1,9 +1,17 @@
 import * as React from "react";
 
+import { AppProvider, Page } from "@shopify/polaris";
+
+import Home from "./Home";
+
 class App extends React.Component {
   public render() {
     return (
-      <div>Hi</div>
+      <AppProvider>
+        <Page title="">
+          <Home />
+        </Page>
+      </AppProvider>
     );
   }
 }
