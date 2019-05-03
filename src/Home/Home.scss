@@ -16,45 +16,57 @@
   width: 100%;
 }
 
-@mixin OptionBoxShadow($borderColor, $GlowColor) {
+@mixin BoxShadow($borderColor, $GlowColor) {
   box-shadow: 0 0 0 1px $borderColor, 0 1px 20px 0 $GlowColor;
 }
 
+@mixin BoxShadowHoverLeft($borderColor, $GlowColor) {
+  box-shadow: 0 0 0 1px $borderColor, -5px 4px 20px 0 $GlowColor;
+}
+
+@mixin BoxShadowHoverRight($borderColor, $GlowColor) {
+  box-shadow: 0 0 0 1px $borderColor, 5px 4px 20px 0 $GlowColor;
+}
+
 .Option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  top: 0;
   width: 200px;
   padding: spacing(tight) 0;
   border-radius: spacing(tight);
 
   $option-margin: spacing(loose);
-  $box-shadow-transition: box-shadow 0.3s ease-in-out;
+  $move-on-hover: 4px;
+  $transition: all ease-in-out 0.3s;
+
+  transition: $transition;
+
+  &:hover {
+    top: -$move-on-hover;
+    transition: $transition;
+  }
 
   &:first-child {
     background: color(yellow);
     margin-right: $option-margin;
-    @include OptionBoxShadow(color(sky), color(ink, lightest));
+    @include BoxShadow(color(sky), color(ink, lightest));
 
     &:hover {
-      @include OptionBoxShadow(color(sky), color(ink, lighter));
-      transition: $box-shadow-transition;
+      @include BoxShadowHoverLeft(color(sky), color(ink, lighter));
     }
   }
 
   &:last-child {
     background: color(purple);
     margin-left: $option-margin;
-    @include OptionBoxShadow(color(ink, lightest), color(ink, lightest));
+    @include BoxShadow(color(ink, lightest), color(ink, lightest));
 
     &:hover {
-      @include OptionBoxShadow(color(ink, lightest), color(ink, light));
-      transition: $box-shadow-transition;
+      @include BoxShadowHoverRight(color(ink, lighter), color(ink, light));
     }
-  }
-
-  &:first-child,
-  &:last-child {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
   }
 }
 
