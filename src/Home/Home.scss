@@ -1,0 +1,39 @@
+@import '../GlobalStyles/colors.scss';
+@import '../GlobalStyles/spacing.scss';
+
+.Layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+}
+
+.OptionsContainer {
+  display: flex;
+  justify-content: center;
+  padding-top: spacing();
+  width: 100%;
+}
+
+.Option {
+  width: 200px;
+  $option-width: spacing();
+
+  &:first-child {
+    background: color(yellow);
+    margin-right: $option-width;
+  }
+
+  &:last-child {
+    background: color(purple);
+    margin-left: $option-width;
+  }
+
+  &:first-child,
+  &:last-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}

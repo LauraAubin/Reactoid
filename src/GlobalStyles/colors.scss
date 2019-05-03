@@ -1,0 +1,32 @@
+@function color($color, $hue: 'default') {
+  @if map-has-key($colors, $color) {
+
+    $scoped: map-get($colors, $color);
+    @return get-specific-color($color, $scoped, $hue);
+
+  } @else {
+    @return black;
+  }
+}
+
+@function get-specific-color($color, $scoped, $hue) {
+  @if map-has-key($scoped, $hue) {
+    @return map-get($scoped, $hue);
+
+  } @else {
+    @return map-get($scoped, $color);
+  }
+}
+
+$colors: (
+  yellow: (
+    light: #fff3c4,
+    yellow: #ffe787,
+    dark: #d3ba56,
+  ),
+  purple: (
+    light: #b3a6fc,
+    purple: #6052b2,
+    dark: #43368e,
+  ),
+);
