@@ -1,13 +1,17 @@
 import * as React from 'react';
 
-import { DisplayText, Heading } from '@shopify/polaris';
+import { DisplayText } from '@shopify/polaris';
 
-import Icon from './components/Icon';
+import Icon from './components/Icon/Icon';
+import Heading from "../Typography/Heading";
 
 import './Home.scss';
 
 export default class Home extends React.Component {
   public render() {
+    const purple = "#6052b2";
+    const yellow = "#ffe787";
+
     return (
       <div className='Layout'>
         <DisplayText size='medium'>
@@ -15,12 +19,12 @@ export default class Home extends React.Component {
         </DisplayText>
         <div className='OptionsContainer'>
           <div className='Option'>
-            <Icon name='folder' size='medium' />
-            <Heading>Custom</Heading>
+            <Icon name='folder' size='medium' color={purple} />
+            <Heading color={purple}>Custom</Heading>
           </div>
           <div className='Option'>
-            <Icon name='penguin' size='medium' />
-            <Heading>Use existing</Heading>
+            <Icon name='penguin' size='medium' color={yellow} />
+            <Heading color={yellow}>Use existing</Heading>
           </div>
         </div>
       </div>

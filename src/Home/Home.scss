@@ -1,3 +1,4 @@
+@import '../GlobalStyles/colors.scss';
 @import '../GlobalStyles/spacing.scss';
 
 .Layout {
@@ -20,10 +21,12 @@
   $option-width: spacing();
 
   &:first-child {
+    background: color(yellow);
     margin-right: $option-width;
   }
 
   &:last-child {
+    background: color(purple);
     margin-left: $option-width;
   }
 
