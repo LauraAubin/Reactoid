@@ -12,22 +12,31 @@
 .OptionsContainer {
   display: flex;
   justify-content: center;
-  padding-top: spacing();
+  padding-top: spacing(loose);
   width: 100%;
+}
+
+@mixin OptionBoxShadow($borderColor, $GlowColor) {
+  box-shadow: 0 0 0 1px $borderColor, 0 1px 20px 0 $GlowColor;
 }
 
 .Option {
   width: 200px;
-  $option-width: spacing();
+  padding: spacing(tight) 0;
+  border-radius: spacing(tight);
+
+  $option-margin: spacing(loose);
 
   &:first-child {
     background: color(yellow);
-    margin-right: $option-width;
+    margin-right: $option-margin;
+    @include OptionBoxShadow(lightgrey, grey);
   }
 
   &:last-child {
     background: color(purple);
-    margin-left: $option-width;
+    margin-left: $option-margin;
+    @include OptionBoxShadow(grey, grey);
   }
 
   &:first-child,
@@ -36,4 +45,8 @@
     flex-direction: column;
     align-items: center;
   }
+}
+
+.IconBottomPadding {
+  padding-bottom: spacing(extraTight);
 }
