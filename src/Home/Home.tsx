@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { DisplayText } from '@shopify/polaris';
 
-import Icon from './components/Icon/Icon';
+import Icon from './components/Icon';
 import Heading from "../Typography/Heading";
 
 import './Home.scss';
