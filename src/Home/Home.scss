@@ -12,7 +12,7 @@
 .OptionsContainer {
   display: flex;
   justify-content: center;
-  padding-top: spacing(loose);
+  padding-top: spacing(extraLoose);
   width: 100%;
 }
 
@@ -26,17 +26,28 @@
   border-radius: spacing(tight);
 
   $option-margin: spacing(loose);
+  $box-shadow-transition: box-shadow 0.3s ease-in-out;
 
   &:first-child {
     background: color(yellow);
     margin-right: $option-margin;
-    @include OptionBoxShadow(lightgrey, grey);
+    @include OptionBoxShadow(color(sky), color(ink, lightest));
+
+    &:hover {
+      @include OptionBoxShadow(color(sky), color(ink, lighter));
+      transition: $box-shadow-transition;
+    }
   }
 
   &:last-child {
     background: color(purple);
     margin-left: $option-margin;
-    @include OptionBoxShadow(grey, grey);
+    @include OptionBoxShadow(color(ink, lightest), color(ink, lightest));
+
+    &:hover {
+      @include OptionBoxShadow(color(ink, lightest), color(ink, light));
+      transition: $box-shadow-transition;
+    }
   }
 
   &:first-child,
