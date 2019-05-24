@@ -5,13 +5,13 @@ import { DisplayText } from '@shopify/polaris';
 import Icon from './components/Icon';
 import Heading from '../../components/Typography/Heading';
 
+const PURPLE = '#6052b2';
+const YELLOW = '#ffe787';
+
 import './Home.scss';
 
 export default class Home extends React.Component {
   public render() {
-    const purple = '#6052b2';
-    const yellow = '#ffe787';
-
     return (
       <div className='Layout'>
         <DisplayText size='medium'>
@@ -20,15 +20,15 @@ export default class Home extends React.Component {
         <div className='OptionsContainer'>
           <div className='Option'>
             <div className='IconBottomPadding'>
-              <Icon name='folder' size='medium' color={purple} />
+              <Icon name='folder' size='medium' color={PURPLE} />
             </div>
-            <Heading color={purple}>Custom</Heading>
+            <Heading color={PURPLE}>Custom</Heading>
           </div>
           <div className='Option'>
             <div className='IconBottomPadding'>
-              <Icon name='penguin' size='medium' color={yellow} />
+              <Icon name='penguin' size='medium' color={YELLOW} />
             </div>
-            <Heading color={yellow}>Use existing</Heading>
+            <Heading color={YELLOW}>Use existing</Heading>
           </div>
         </div>
       </div>
