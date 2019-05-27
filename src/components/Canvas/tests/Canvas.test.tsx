@@ -5,6 +5,12 @@ import Canvas from '../Canvas';
 
 Enzyme.configure({ adapter: new Adapter() });
 
+declare global {
+  interface Window {
+    HTMLCanvasElement: any;
+  }
+}
+
 describe('Canvas', () => {
   const defaultProps = {
     width: 0,
