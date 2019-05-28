@@ -2,6 +2,8 @@ import * as React from 'react';
 
 import autobind from 'autobind-decorator';
 
+import './Canvas.scss';
+
 type coordinate = {
   offsetX: number;
   offsetY: number;
@@ -66,6 +68,7 @@ export default class Canvas extends React.Component<Props, State> {
       <canvas
         ref={ref => !this.state.canvas && this.setState({ canvas: ref })}
         style={{ background: backgroundColor }}
+        className='Canvas'
         onMouseDown={this.onMouseDown}
         onMouseLeave={this.endPaintEvent}
         onMouseUp={this.endPaintEvent}
