@@ -1,13 +1,9 @@
 import * as React from 'react';
 
 import autobind from 'autobind-decorator';
+import { coordinate } from './types/types';
 
 import './Canvas.scss';
-
-type coordinate = {
-  offsetX: number;
-  offsetY: number;
-};
 
 interface Props {
   width: number;
@@ -35,6 +31,10 @@ export default class Canvas extends React.Component<Props, State> {
       previousCoordinate: { offsetX: 0, offsetY: 0 },
       line: []
     };
+  }
+
+  componentDidMount() {
+    this.setState({ canvas: document.getElementById("canvas") })
   }
 
   componentDidUpdate() {
@@ -66,7 +66,7 @@ export default class Canvas extends React.Component<Props, State> {
 
     return (
       <canvas
-        ref={ref => !this.state.canvas && this.setState({ canvas: ref })}
+        id="canvas"
         style={{ background: backgroundColor }}
         className='Canvas'
         onMouseDown={this.onMouseDown}
