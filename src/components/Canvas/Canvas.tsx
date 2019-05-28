@@ -86,7 +86,6 @@ export default class Canvas extends React.Component<Props, State> {
 
   @autobind
   onMouseMove({ nativeEvent }: any) {
-    const { lineColor } = this.props;
     const { isPainting, previousCoordinate } = this.state;
 
     if (isPainting) {
@@ -94,7 +93,7 @@ export default class Canvas extends React.Component<Props, State> {
       const currentCoordinate = { offsetX, offsetY };
 
       this.addNewLineData();
-      this.paint(previousCoordinate, currentCoordinate, lineColor);
+      this.paint(previousCoordinate, currentCoordinate);
     }
   }
 
@@ -105,28 +104,47 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   @autobind
-  paint(
-    previousCoordinate: coordinate,
-    currentCoordinate: coordinate,
-    color: string
-  ) {
-    const { canvas, canvasContext } = this.state;
-    const { offsetX: previousX, offsetY: previousY } = previousCoordinate;
+  paint(previousCoordinate: coordinate, currentCoordinate: coordinate) {
+    const { canvas } = this.state;
     const { offsetX: currentX, offsetY: currentY } = currentCoordinate;
 
     if (canvas) {
-      canvasContext.beginPath();
-
-      canvasContext.moveTo(previousX, previousY);
-      canvasContext.lineTo(currentX, currentY);
-
-      canvasContext.strokeStyle = color;
-      canvasContext.stroke();
+      this.drawLineSegment(previousCoordinate, currentCoordinate);
 
       this.setState({
         previousCoordinate: { offsetX: currentX, offsetY: currentY }
       });
     }
+  }
+
+  drawLineSegment(
+    previousCoordinate: coordinate,
+    currentCoordinate: coordinate
+  ) {
+    const { lineColor } = this.props;
+    const { canvasContext } = this.state;
+    const { offsetX: previousX, offsetY: previousY } = previousCoordinate;
+    const { offsetX: currentX, offsetY: currentY } = currentCoordinate;
+
+    canvasContext.beginPath();
+
+    this.startPathAt(previousX, previousY);
+    this.endPathAt(currentX, currentY);
+
+    canvasContext.strokeStyle = lineColor;
+    canvasContext.stroke();
+  }
+
+  startPathAt(x: number, y: number) {
+    const { canvasContext } = this.state;
+
+    canvasContext.moveTo(x, y);
+  }
+
+  endPathAt(x: number, y: number) {
+    const { canvasContext } = this.state;
+
+    canvasContext.lineTo(x, y);
   }
 
   @autobind
