@@ -1,51 +1,85 @@
-import { endsWhereItStarts, isBetween, isOutline } from '../Dataset_utils';
-import { circle } from './SampleDatasets/Circle';
+import { average, createCompleteOutline, sum } from '../Dataset_utils';
 
-describe('isBetween', () => {
-  it('should return true if 5 is between 9 with a modifier of 5', () => {
-    expect(isBetween(5, 9, 5)).toBe(true);
-  });
-
-  it('should return false if 5 is not between 9 with a modifier of 2', () => {
-    expect(isBetween(5, 9, 2)).toBe(false);
-  });
-});
-
-describe('endsWhereItStarts', () => {
-  it('should return true if the initial start coodinate is close to the final one', () => {
+describe('createCompleteOutline', () => {
+  it('should return a modified array to complete a disconnected one on the x axis', () => {
     const array = [
       {
         offsetX: 1,
         offsetY: 1
       },
       {
-        offsetX: 2,
-        offsetY: 3
-      },
-      {
         offsetX: 3,
-        offsetY: 2
+        offsetY: 1
       }
     ];
 
-    expect(isBetween(5, 9, 5)).toBe(true);
+    const expectedArray = [
+      {
+        offsetX: 1,
+        offsetY: 1
+      },
+      {
+        offsetX: 2,
+        offsetY: 1
+      },
+      {
+        offsetX: 3,
+        offsetY: 1
+      }
+    ];
+
+    expect(createCompleteOutline(array, [])).toEqual(expectedArray);
   });
 
-  it('should return true if the initial start coodinate is close to the final one', () => {
-    expect(isBetween(5, 9, 5)).toBe(true);
+  it('should return a modified array to complete a disconnected one on the y axis', () => {
+    const array = [
+      {
+        offsetX: 1,
+        offsetY: 1
+      },
+      {
+        offsetX: 1,
+        offsetY: 3
+      }
+    ];
+
+    const expectedArray = [
+      {
+        offsetX: 1,
+        offsetY: 1
+      },
+      {
+        offsetX: 1,
+        offsetY: 2
+      },
+      {
+        offsetX: 1,
+        offsetY: 3
+      }
+    ];
+
+    expect(createCompleteOutline(array, [])).toEqual(expectedArray);
+  });
+
+  it('returns the same array if the length is 1', () => {
+    const array = [{ offsetX: 1, offsetY: 1 }];
+
+    expect(createCompleteOutline(array, [])).toEqual(array);
   });
 });
 
-describe('isOutline', () => {
-  it('should return true if shape is closed', () => {
-    expect(isOutline(circle)).toBe(true);
+describe('sum', () => {
+  it('should add up an array of numbers and return one number', () => {
+    const numbers = [1, 2, 5, -3];
+
+    expect(sum(numbers)).toEqual(5);
   });
+});
 
-  it('should return true if circle is closed after autoconnect', () => {});
+describe('average', () => {
+  it('should compute the average of an array of numbers and return one number', () => {
+    const numbers = [4, 8, 3];
 
-  it('should return false if partial circle is not closed', () => {});
-
-  it('should return false if there are too many overlaps', () => {});
-
-  it('should return false if the shape is filled in too much', () => {});
+    expect(average(numbers)).toEqual(7.5);
+  });
 });
