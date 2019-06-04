@@ -17,7 +17,7 @@ interface State {
   canvas: any;
   canvasContext: any;
   previousCoordinate: coordinate;
-  line: coordinate[];
+  lineData: coordinate[];
 }
 
 export default class Canvas extends React.Component<Props, State> {
@@ -29,12 +29,12 @@ export default class Canvas extends React.Component<Props, State> {
       canvas: undefined,
       canvasContext: undefined,
       previousCoordinate: { offsetX: 0, offsetY: 0 },
-      line: []
+      lineData: []
     };
   }
 
   componentDidMount() {
-    this.setState({ canvas: document.getElementById("canvas") })
+    this.setState({ canvas: document.getElementById('canvas') });
   }
 
   componentDidUpdate() {
@@ -66,7 +66,7 @@ export default class Canvas extends React.Component<Props, State> {
 
     return (
       <canvas
-        id="canvas"
+        id='canvas'
         style={{ background: backgroundColor }}
         className='Canvas'
         onMouseDown={this.onMouseDown}
@@ -101,9 +101,9 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   addNewLineData() {
-    const { previousCoordinate, line } = this.state;
+    const { previousCoordinate, lineData } = this.state;
 
-    this.setState({ line: line.concat({ ...previousCoordinate }) });
+    this.setState({ lineData: lineData.concat({ ...previousCoordinate }) });
   }
 
   @autobind
