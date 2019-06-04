@@ -4,7 +4,7 @@ export function createCompleteOutline(
   dataSet: coordinate[],
   buildDataSet: coordinate[],
   acceptableDifference: number = 1
-) {
+): coordinate[] {
   if (dataSet.length == 1) {
     buildDataSet.push(dataSet[0]);
 
