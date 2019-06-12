@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DisplayText } from '@shopify/polaris';
 import { PURPLE, YELLOW } from '../../globalStyles/colors';
 
-import Icon from './components/Icon';
+import Icon from '../../components/Icon';
 import Heading from '../../components/Typography/Heading';
 
 import './Home.scss';
@@ -18,7 +18,7 @@ export default class Home extends React.Component {
         <div className='OptionsContainer'>
           <a className='Option' href='/draw/'>
             <div className='IconBottomPadding'>
-              <Icon name='folder' size='medium' color={PURPLE} />
+              <Icon name='paint' size='medium' color={PURPLE} />
             </div>
             <Heading color={PURPLE}>Custom</Heading>
           </a>

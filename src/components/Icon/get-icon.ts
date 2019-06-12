@@ -1,7 +1,8 @@
 // All icons are available at https://github.com/FortAwesome/Font-Awesome/tree/master/svgs
 import {
   faBook as book,
-  faFolderPlus as folder
+  faFolderPlus as folder,
+  faPalette as paint
 } from '@fortawesome/free-solid-svg-icons';
 import { faQq as penguin } from '@fortawesome/free-brands-svg-icons';
 
@@ -12,6 +13,7 @@ interface Icons {
 const icons: Icons = {
   book,
   folder,
+  paint,
   penguin
 };
 
