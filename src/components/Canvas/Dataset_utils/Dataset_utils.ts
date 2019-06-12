@@ -1,12 +1,16 @@
 import { coordinate } from '../types/types';
 
 export function createCompleteOutline(
-  dataSet: coordinate[],
-  buildDataSet: coordinate[],
+  dataSetOriginal: coordinate[],
+  buildDataSetOriginal: coordinate[],
   acceptableDifference: number = 1
 ): coordinate[] {
-  if (dataSet.length == 1) {
-    // Add last element
+  const dataSet = deepCopy(dataSetOriginal);
+  const buildDataSet = deepCopy(buildDataSetOriginal);
+
+  if (dataSet.length <= 0) return buildDataSet;
+
+  if (dataSet.length == 1) { // last element
     buildDataSet.push(dataSet[0]);
 
     return connectEndToStart(dataSet, buildDataSet);
@@ -125,4 +129,8 @@ export function sum(numbers: number[]) {
   numbers.map(x => (sum += x));
 
   return sum;
+}
+
+function deepCopy(array: coordinate[]) {
+  return JSON.parse(JSON.stringify(array));;
 }
