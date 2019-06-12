@@ -1,14 +1,23 @@
 import * as React from 'react';
 
+import { css } from 'aphrodite';
 import { Link } from 'react-router-dom';
+import { Animations } from '../../animations/animations';
+
+import Canvas from '../../components/Canvas';
 
 export default class Draw extends React.Component {
   public render() {
     return (
-      <div>
-        Draw Page
-        <br></br>
-        <Link to="/">Home</Link>
+      <div className={css(Animations.growFromBottomLeft)}>
+        <Canvas
+          width={1000}
+          height={500}
+          lineColor='yellow'
+          backgroundColor='teal'
+        />
+        <br />
+        <Link to='/'>Home</Link>
       </div>
     );
   }
