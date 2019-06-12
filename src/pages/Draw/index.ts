@@ -1,3 +1,3 @@
-import Draw from "./Draw";
+import Draw from './Draw';
 
 export default Draw;

@@ -7,8 +7,8 @@ export default class EmptyState extends React.Component {
     return (
       <div>
         Empty State
-        <br></br>
-        <Link to="/">Home</Link>
+        <br />
+        <Link to='/'>Home</Link>
       </div>
     );
   }
