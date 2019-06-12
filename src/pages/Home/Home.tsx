@@ -1,12 +1,10 @@
 import * as React from 'react';
 
 import { DisplayText } from '@shopify/polaris';
+import { PURPLE, YELLOW } from '../../globalStyles/colors';
 
 import Icon from './components/Icon';
 import Heading from '../../components/Typography/Heading';
-
-const PURPLE = '#6052b2';
-const YELLOW = '#ffe787';
 
 import './Home.scss';
 
