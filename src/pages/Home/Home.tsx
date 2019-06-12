@@ -18,12 +18,12 @@ export default class Home extends React.Component {
           How would you like to build your character?
         </DisplayText>
         <div className='OptionsContainer'>
-          <div className='Option'>
+          <a className='Option' href='/draw/'>
             <div className='IconBottomPadding'>
               <Icon name='folder' size='medium' color={PURPLE} />
             </div>
             <Heading color={PURPLE}>Custom</Heading>
-          </div>
+          </a>
           <div className='Option'>
             <div className='IconBottomPadding'>
               <Icon name='penguin' size='medium' color={YELLOW} />
