@@ -25,6 +25,10 @@ describe('createCompleteOutline', () => {
       {
         offsetX: 3,
         offsetY: 1
+      },
+      {
+        offsetX: 2,
+        offsetY: 1
       }
     ];
 
@@ -55,6 +59,52 @@ describe('createCompleteOutline', () => {
       {
         offsetX: 1,
         offsetY: 3
+      },
+      {
+        offsetX: 1,
+        offsetY: 2
+      }
+    ];
+
+    expect(createCompleteOutline(array, [])).toEqual(expectedArray);
+  });
+
+  it('should return a modified array to complete a disconnected one on both axises', () => {
+    const array = [
+      {
+        offsetX: 1,
+        offsetY: 12
+      },
+      {
+        offsetX: 4,
+        offsetY: 14
+      }
+    ];
+
+    const expectedArray = [
+      {
+        offsetX: 1,
+        offsetY: 12
+      },
+      {
+        offsetX: 2,
+        offsetY: 13
+      },
+      {
+        offsetX: 3,
+        offsetY: 14
+      },
+      {
+        offsetX: 4,
+        offsetY: 14
+      },
+      {
+        offsetX: 3,
+        offsetY: 12
+      },
+      {
+        offsetX: 2,
+        offsetY: 12
       }
     ];
 
