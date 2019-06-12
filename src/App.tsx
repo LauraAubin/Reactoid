@@ -6,6 +6,7 @@ import { AppProvider, Page } from '@shopify/polaris';
 import EmptyState from './pages/EmptyState';
 import Draw from './pages/Draw';
 import Home from './pages/Home';
+import View from './pages/View';
 
 class App extends React.Component {
   public render() {
@@ -16,6 +17,7 @@ class App extends React.Component {
             <Switch>
               <Route exact path='/' component={Home} />
               <Route path='/draw/' component={Draw} />
+              <Route path='/view/' component={View} />
               <Route component={EmptyState} />
             </Switch>
           </Page>

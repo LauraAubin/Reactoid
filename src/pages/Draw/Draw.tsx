@@ -19,6 +19,8 @@ export default class Draw extends React.Component {
         />
         <br />
         <Link to='/'>Home</Link>
+        <br />
+        <Link to='/view/'>View</Link>
       </div>
     );
   }
