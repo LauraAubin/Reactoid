@@ -10,55 +10,78 @@ export function createCompleteOutline(
 
   if (dataSet.length <= 0) return buildDataSet;
 
-  if (dataSet.length == 1) { // last element
-    buildDataSet.push(dataSet[0]);
+  dataSet.forEach((element: coordinate, index: number) => {
+    if (index == dataSet.length - 1) {
+      // last element
+      buildDataSet.push(dataSet[index]);
 
-    return connectEndToStart(dataSet, buildDataSet);
-  }
+      return connectEndToStart(buildDataSet);
+    }
 
-  const { offsetX: firstX, offsetY: firstY } = dataSet[0];
-  const { offsetX: secondX, offsetY: secondY } = dataSet[1];
+    const { offsetX: firstX, offsetY: firstY } = element;
+    const { offsetX: secondX, offsetY: secondY } = dataSet[index + 1];
 
-  const dataPairDifferenceX = Math.abs(firstX - secondX);
-  const dataPairDifferenceY = Math.abs(firstY - secondY);
+    const dataPairDifferenceX = Math.abs(firstX - secondX);
+    const dataPairDifferenceY = Math.abs(firstY - secondY);
 
-  transitionDataSet(dataSet, buildDataSet);
+    const isBreakpoint =
+      dataPairDifferenceX > acceptableDifference ||
+      dataPairDifferenceY > acceptableDifference;
 
-  const isBreakpoint =
-    dataPairDifferenceX > acceptableDifference ||
-    dataPairDifferenceY > acceptableDifference;
+    transitionDataSet(buildDataSet, element);
 
-  if (isBreakpoint)
-    dataPairDifferenceX > dataPairDifferenceY
-      ? addNewElementToBeginning(
-          dataSet,
-          firstX + 1,
-          roundUp(average([firstY, secondY]))
-        )
-      : addNewElementToBeginning(
-          dataSet,
-          roundUp(average([firstX, secondX])),
-          firstY + 1
-        );
+    if (isBreakpoint) {
+      const largestDifference = Math.max(
+        dataPairDifferenceX,
+        dataPairDifferenceY
+      );
+      const loopTimes = largestDifference - 1;
 
-  return createCompleteOutline(dataSet, buildDataSet);
-}
+      [...Array(loopTimes).keys()].forEach(index => {
+        const determineIndexDirection = (
+          start: number,
+          end: number,
+          modifier: number = start
+        ) => (start < end ? modifier + index : modifier - index);
 
-function transitionDataSet(dataSet: coordinate[], buildDataSet: coordinate[]) {
-  addToEnd(buildDataSet, dataSet[0]);
-  dropFirstElement(dataSet);
-}
+        const determineOffsetDirection = (start: number, end: number) =>
+          start < end
+            ? determineIndexDirection(start, end) + 1
+            : determineIndexDirection(start, end) - 1;
 
-function addNewElementToBeginning(array: coordinate[], x: number, y: number) {
-  array.unshift({
-    offsetX: x,
-    offsetY: y
+        dataPairDifferenceX > dataPairDifferenceY
+          ? addToEnd(buildDataSet, {
+              offsetX: determineOffsetDirection(firstX, secondX),
+              offsetY: roundUp(
+                average([
+                  determineIndexDirection(firstY, secondY),
+                  determineIndexDirection(firstY, secondY, secondY)
+                ])
+              )
+            })
+          : addToEnd(buildDataSet, {
+              offsetX: roundUp(
+                average([
+                  determineIndexDirection(firstX, secondX),
+                  determineIndexDirection(firstX, secondX, secondX)
+                ])
+              ),
+              offsetY: determineOffsetDirection(firstY, secondY)
+            });
+      });
+    }
   });
+
+  return buildDataSet;
 }
 
-function connectEndToStart(dataSet: coordinate[], buildDataSet: coordinate[]) {
+function transitionDataSet(buildDataSet: coordinate[], toAdd: coordinate) {
+  addToEnd(buildDataSet, toAdd);
+}
+
+function connectEndToStart(buildDataSet: coordinate[]) {
   const { offsetX: startX, offsetY: startY } = buildDataSet[0];
-  const { offsetX: endX, offsetY: endY } = dataSet[0];
+  const { offsetX: endX, offsetY: endY } = last(buildDataSet);
 
   const differenceX = Math.abs(endX - startX);
   const differenceY = Math.abs(endY - startY);
@@ -100,10 +123,6 @@ function connectEndToStart(dataSet: coordinate[], buildDataSet: coordinate[]) {
   return buildDataSet;
 }
 
-function dropFirstElement(array: coordinate[]) {
-  array.shift();
-}
-
 function addToEnd(array: coordinate[], toAdd: coordinate) {
   array.push(toAdd);
 }
@@ -132,5 +151,5 @@ export function sum(numbers: number[]) {
 }
 
 function deepCopy(array: coordinate[]) {
-  return JSON.parse(JSON.stringify(array));;
+  return JSON.parse(JSON.stringify(array));
 }
