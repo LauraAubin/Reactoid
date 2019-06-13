@@ -1,13 +1,10 @@
 import { coordinate } from '../types/types';
 
 export function createCompleteOutline(
-  dataSetOriginal: coordinate[],
-  buildDataSetOriginal: coordinate[],
+  dataSet: coordinate[],
+  buildDataSet: coordinate[],
   acceptableDifference: number = 1
 ): coordinate[] {
-  const dataSet = deepCopy(dataSetOriginal);
-  const buildDataSet = deepCopy(buildDataSetOriginal);
-
   if (dataSet.length <= 0) return buildDataSet;
 
   dataSet.forEach((element: coordinate, index: number) => {
