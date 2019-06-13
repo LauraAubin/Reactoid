@@ -1,7 +1,9 @@
 import * as React from 'react';
 
-import autobind from 'autobind-decorator';
 import { coordinate } from './types/types';
+import { createCompleteOutline } from './Dataset_utils/Dataset_utils';
+
+import autobind from 'autobind-decorator';
 
 import './Canvas.scss';
 
@@ -10,6 +12,7 @@ interface Props {
   height: number;
   lineColor: string;
   backgroundColor: string;
+  outline?(setOutline: coordinate[]): void;
 }
 
 interface State {
@@ -152,9 +155,12 @@ export default class Canvas extends React.Component<Props, State> {
 
   @autobind
   endPaintEvent() {
-    const { isPainting } = this.state;
+    const { outline } = this.props;
+    const { isPainting, lineData } = this.state;
 
     isPainting && this.togglepainting();
+
+    outline && outline(createCompleteOutline(lineData, []));
   }
 
   togglepainting() {
