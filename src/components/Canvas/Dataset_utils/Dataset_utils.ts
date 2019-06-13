@@ -1,8 +1,8 @@
-import { coordinate } from '../types/types';
+import { canvasTypes, coordinate, buildCoordinates } from '../types/types';
 
 export function createCompleteOutline(
   dataSet: coordinate[],
-  buildDataSet: coordinate[],
+  buildDataSet: buildCoordinates[],
   acceptableDifference: number = 1
 ): coordinate[] {
   if (dataSet.length <= 0) return buildDataSet;
@@ -10,7 +10,7 @@ export function createCompleteOutline(
   dataSet.forEach((element: coordinate, index: number) => {
     if (index == dataSet.length - 1) {
       // last element
-      buildDataSet.push(dataSet[index]);
+      buildDataSet.push({ ...dataSet[index], type: 'drawn' });
 
       return connectEndToStart(buildDataSet);
     }
@@ -25,7 +25,7 @@ export function createCompleteOutline(
       dataPairDifferenceX > acceptableDifference ||
       dataPairDifferenceY > acceptableDifference;
 
-    transitionDataSet(buildDataSet, element);
+    addToEnd(buildDataSet, { ...element, type: 'drawn' });
 
     if (isBreakpoint) {
       const largestDifference = Math.max(
@@ -54,7 +54,8 @@ export function createCompleteOutline(
                   determineIndexDirection(firstY, secondY),
                   determineIndexDirection(firstY, secondY, secondY)
                 ])
-              )
+              ),
+              type: 'generated'
             })
           : addToEnd(buildDataSet, {
               offsetX: roundUp(
@@ -63,7 +64,8 @@ export function createCompleteOutline(
                   determineIndexDirection(firstX, secondX, secondX)
                 ])
               ),
-              offsetY: determineOffsetDirection(firstY, secondY)
+              offsetY: determineOffsetDirection(firstY, secondY),
+              type: 'generated'
             });
       });
     }
@@ -72,11 +74,7 @@ export function createCompleteOutline(
   return buildDataSet;
 }
 
-function transitionDataSet(buildDataSet: coordinate[], toAdd: coordinate) {
-  addToEnd(buildDataSet, toAdd);
-}
-
-function connectEndToStart(buildDataSet: coordinate[]) {
+function connectEndToStart(buildDataSet: buildCoordinates[]) {
   const { offsetX: startX, offsetY: startY } = buildDataSet[0];
   const { offsetX: endX, offsetY: endY } = last(buildDataSet);
 
@@ -111,7 +109,8 @@ function connectEndToStart(buildDataSet: coordinate[]) {
         differenceY,
         determineOffsetDirection(startY, endY, last(buildDataSet).offsetY),
         startY
-      )
+      ),
+      type: 'generated' as canvasTypes
     };
 
     addToEnd(buildDataSet, toAdd);
@@ -120,8 +119,8 @@ function connectEndToStart(buildDataSet: coordinate[]) {
   return buildDataSet;
 }
 
-function addToEnd(array: coordinate[], toAdd: coordinate) {
-  array.push(toAdd);
+function addToEnd(buildArray: buildCoordinates[], toAdd: buildCoordinates) {
+  buildArray.push(toAdd);
 }
 
 function last(array: coordinate[]) {
