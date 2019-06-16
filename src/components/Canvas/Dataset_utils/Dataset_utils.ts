@@ -2,9 +2,10 @@ import { canvasTypes, coordinate, buildCoordinates } from '../types/types';
 
 export function createCompleteOutline(
   dataSet: coordinate[],
-  buildDataSet: buildCoordinates[],
   acceptableDifference: number = 1
 ): coordinate[] {
+  let buildDataSet: buildCoordinates[] = [];
+
   if (dataSet.length <= 0) return buildDataSet;
 
   dataSet.forEach((element: coordinate, index: number) => {
