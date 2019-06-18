@@ -1,18 +1,25 @@
 import * as React from 'react';
 
-import { coordinate, buildCoordinates } from './types/types';
-import { createCompleteOutline } from './Dataset_utils/Dataset_utils';
+import { coordinate, canvasTypes } from './types/types';
+import {
+  createCompleteOutline,
+  onlyGeneratedCoodinates
+} from './Dataset_utils/Dataset_utils';
+import { interval } from '../../utilities/math';
 
 import autobind from 'autobind-decorator';
+import Dot from './Dot';
 
 import './Canvas.scss';
+
+const DOT_INTERVAL = 15;
 
 interface Props {
   width: number;
   height: number;
   lineColor: string;
   backgroundColor: string;
-  outline?(setOutline: buildCoordinates[]): void;
+  setOutline?(setOutline: coordinate[]): void;
 }
 
 interface State {
@@ -21,6 +28,7 @@ interface State {
   canvasContext: any;
   previousCoordinate: coordinate;
   lineData: coordinate[];
+  outlineData: coordinate[];
 }
 
 export default class Canvas extends React.Component<Props, State> {
@@ -31,8 +39,9 @@ export default class Canvas extends React.Component<Props, State> {
       isPainting: false,
       canvas: undefined,
       canvasContext: undefined,
-      previousCoordinate: { offsetX: 0, offsetY: 0 },
-      lineData: []
+      previousCoordinate: { offsetX: 0, offsetY: 0, type: 'generated' },
+      lineData: [],
+      outlineData: []
     };
   }
 
@@ -86,7 +95,7 @@ export default class Canvas extends React.Component<Props, State> {
 
     this.setState({
       isPainting: true,
-      previousCoordinate: { offsetX, offsetY }
+      previousCoordinate: { offsetX, offsetY, type: 'beginDraw' }
     });
   }
 
@@ -96,10 +105,26 @@ export default class Canvas extends React.Component<Props, State> {
 
     if (isPainting) {
       const { offsetX, offsetY } = nativeEvent;
-      const currentCoordinate = { offsetX, offsetY };
+      const currentCoordinate = {
+        offsetX,
+        offsetY,
+        type: 'drawn' as canvasTypes
+      };
 
       this.addNewLineData();
       this.paint(previousCoordinate, currentCoordinate);
+    }
+  }
+
+  @autobind
+  endPaintEvent() {
+    const { isPainting } = this.state;
+
+    // TODO - calculate completeOutline when launching the view page
+    if (isPainting) {
+      this.setEndDraw().then(() =>
+        this.completeOutline().then(() => this.togglepainting())
+      );
     }
   }
 
@@ -118,7 +143,11 @@ export default class Canvas extends React.Component<Props, State> {
       this.drawLineSegment(previousCoordinate, currentCoordinate);
 
       this.setState({
-        previousCoordinate: { offsetX: currentX, offsetY: currentY }
+        previousCoordinate: {
+          offsetX: currentX,
+          offsetY: currentY,
+          type: 'drawn'
+        }
       });
     }
   }
@@ -153,14 +182,6 @@ export default class Canvas extends React.Component<Props, State> {
     canvasContext.lineTo(x, y);
   }
 
-  @autobind
-  endPaintEvent() {
-    const { isPainting } = this.state;
-
-    isPainting && this.togglepainting();
-    this.completeOutline();
-  }
-
   togglepainting() {
     const { isPainting } = this.state;
 
@@ -168,10 +189,44 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   @autobind
-  completeOutline() {
-    const { outline } = this.props;
+  async setEndDraw() {
+    const { previousCoordinate } = this.state;
+    const { offsetX, offsetY } = previousCoordinate;
+
+    this.setState(
+      {
+        previousCoordinate: { offsetX, offsetY, type: 'endDraw' }
+      },
+      () => this.addNewLineData()
+    );
+  }
+
+  @autobind
+  async completeOutline() {
+    const { setOutline } = this.props;
     const { lineData } = this.state;
 
-    outline && outline(createCompleteOutline(lineData));
+    const outline = createCompleteOutline(lineData);
+
+    this.setState({ outlineData: outline });
+
+    onlyGeneratedCoodinates(outline).map(
+      ({ offsetX, offsetY }, index) =>
+        interval(index, DOT_INTERVAL) && this.drawDot(offsetX, offsetY)
+    );
+
+    setOutline && setOutline(outline);
+  }
+
+  drawDot(x: number, y: number) {
+    const { canvasContext } = this.state;
+
+    Dot({
+      canvasContext,
+      x: x,
+      y: y,
+      size: 2,
+      glowSize: 3
+    });
   }
 }

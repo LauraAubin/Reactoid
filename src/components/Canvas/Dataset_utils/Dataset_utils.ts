@@ -143,3 +143,13 @@ export function excludeDrawnSegments(dataSet: coordinate[]) {
 
   return dataSetCopy;
 }
+
+export function onlyGeneratedCoodinates(outline: coordinate[]) {
+  const excludeDrawn = excludeDrawnSegments(outline);
+
+  const onlyGeneratedCoodinates = excludeDrawn.filter(
+    ({ type }) => type == 'generated'
+  );
+
+  return onlyGeneratedCoodinates;
+}
