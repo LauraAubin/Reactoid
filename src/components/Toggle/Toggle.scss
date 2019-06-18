@@ -1,0 +1,66 @@
+@import "../../globalStyles/colors.scss";
+
+$switch-width: 60px;
+$slider-padding: 4px;
+$slider-size: 26px;
+$slider-translation: $switch-width - $slider-size - ($slider-padding * 2);
+
+$transition: 0.5s;
+
+@mixin BoxShadow($borderColor, $GlowColor) {
+  box-shadow: 0 0 0 1px $borderColor, 0 1px 4px 0 $GlowColor;
+}
+
+.Switch {
+  position: relative;
+  display: inline-block;
+  width: $switch-width;
+  height: 34px;
+}
+
+.Switch input {
+  position: absolute;
+  top: -100px;
+  left: -100px;
+}
+
+.Checkbox {
+  visibility: hidden;
+}
+
+.Slider {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  cursor: pointer;
+  border-radius: 34px;
+  background: color(sky, dark);
+  transition: $transition;
+
+  @include BoxShadow(color(sky), color(ink, lightest));
+}
+
+.Slider:before {
+  content: "";
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  height: $slider-size;
+  width: $slider-size;
+  left: $slider-padding;
+  bottom: $slider-padding;
+  transition: $transition;
+
+  @include BoxShadow(color(sky, dark), color(ink, lightest));
+}
+
+input:Checked + .Slider {
+  background: color(purple);
+}
+
+input:Checked + .Slider:before {
+  transform: translateX($slider-translation);
+  background: color(yellow);
+}
