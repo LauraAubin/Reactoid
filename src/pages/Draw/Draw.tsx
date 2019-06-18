@@ -5,12 +5,12 @@ import { css } from 'aphrodite';
 import { Link } from 'react-router-dom';
 import { Animations } from '../../animations/animations';
 import { PURPLE, YELLOW } from '../../globalStyles/colors';
-import { buildCoordinates } from 'src/components/Canvas/types/types';
+import { coordinate } from 'src/components/Canvas/types/types';
 
 import Canvas from '../../components/Canvas';
 
 interface State {
-  outline: buildCoordinates[];
+  outline: coordinate[];
 }
 
 export default class Draw extends React.Component<{}, State> {
@@ -27,7 +27,7 @@ export default class Draw extends React.Component<{}, State> {
           height={500}
           lineColor={YELLOW}
           backgroundColor={PURPLE}
-          outline={this.setOutline}
+          setOutline={this.setOutline}
         />
         <br />
         <Link to='/'>Home</Link>
@@ -38,7 +38,7 @@ export default class Draw extends React.Component<{}, State> {
   }
 
   @autobind
-  setOutline(outline: buildCoordinates[]) {
+  setOutline(outline: coordinate[]) {
     this.setState({ outline });
   }
 }
