@@ -1,15 +1,18 @@
-import { average, createCompleteOutline, sum } from '../Dataset_utils';
+import { createCompleteOutline, excludeDrawnSegments } from '../Dataset_utils';
+import { canvasTypes } from '../../types/types';
 
 describe('createCompleteOutline', () => {
   it('should return a modified array to complete a disconnected one on the x axis', () => {
     const array = [
       {
         offsetX: 1,
-        offsetY: 1
+        offsetY: 1,
+        type: 'drawn' as canvasTypes
       },
       {
         offsetX: 3,
-        offsetY: 1
+        offsetY: 1,
+        type: 'drawn' as canvasTypes
       }
     ];
 
@@ -43,11 +46,13 @@ describe('createCompleteOutline', () => {
     const array = [
       {
         offsetX: 1,
-        offsetY: 1
+        offsetY: 1,
+        type: 'drawn' as canvasTypes
       },
       {
         offsetX: 1,
-        offsetY: 3
+        offsetY: 3,
+        type: 'drawn' as canvasTypes
       }
     ];
 
@@ -77,15 +82,17 @@ describe('createCompleteOutline', () => {
     expect(createCompleteOutline(array)).toEqual(expectedArray);
   });
 
-  it('should return a modified array to complete a disconnected one on both axises', () => {
+  it('should return a modified array to complete a disconnected one on both axis', () => {
     const array = [
       {
         offsetX: 1,
-        offsetY: 12
+        offsetY: 12,
+        type: 'drawn' as canvasTypes
       },
       {
         offsetX: 4,
-        offsetY: 14
+        offsetY: 14,
+        type: 'drawn' as canvasTypes
       }
     ];
 
@@ -126,25 +133,56 @@ describe('createCompleteOutline', () => {
   });
 
   it('returns the same array with a type if the length is 1', () => {
-    const array = [{ offsetX: 1, offsetY: 1 }];
+    const array = [{ offsetX: 1, offsetY: 1, type: 'drawn' as canvasTypes }];
     const expectedArray = [{ ...array[0], type: 'drawn' }];
 
     expect(createCompleteOutline(array)).toEqual(expectedArray);
   });
 });
 
-describe('sum', () => {
-  it('should add up an array of numbers and return one number', () => {
-    const numbers = [1, 2, 5, -3];
+describe('excludeDrawnSegments', () => {
+  it('should remove everything between a beginDraw and an endDraw type inclusive', () => {
+    const array = [
+      {
+        offsetX: 1,
+        offsetY: 1,
+        type: 'generated' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 2,
+        type: 'beginDraw' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 3,
+        type: 'drawn' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 4,
+        type: 'endDraw' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 5,
+        type: 'drawn' as canvasTypes
+      }
+    ];
 
-    expect(sum(numbers)).toEqual(5);
-  });
-});
+    const expectedArray = [
+      {
+        offsetX: 1,
+        offsetY: 1,
+        type: 'generated' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 5,
+        type: 'drawn' as canvasTypes
+      }
+    ];
 
-describe('average', () => {
-  it('should compute the average of an array of numbers and return one number', () => {
-    const numbers = [4, 8, 3];
-
-    expect(average(numbers)).toEqual(7.5);
+    expect(excludeDrawnSegments(array)).toEqual(expectedArray);
   });
 });

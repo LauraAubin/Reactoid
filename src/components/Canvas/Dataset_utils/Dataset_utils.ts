@@ -1,17 +1,19 @@
-import { canvasTypes, coordinate, buildCoordinates } from '../types/types';
+import { canvasTypes, coordinate } from '../types/types';
+import { addToEnd, last, deepCopy } from '../../../utilities/arrays';
+import { average, roundUp } from '../../../utilities/math';
 
 export function createCompleteOutline(
   dataSet: coordinate[],
   acceptableDifference: number = 1
-): buildCoordinates[] {
-  let buildDataSet: buildCoordinates[] = [];
+): coordinate[] {
+  let buildDataSet: coordinate[] = [];
 
   if (dataSet.length <= 0) return buildDataSet;
 
   dataSet.forEach((element: coordinate, index: number) => {
     if (index == dataSet.length - 1) {
       // last element
-      buildDataSet.push({ ...dataSet[index], type: 'drawn' });
+      buildDataSet.push({ ...dataSet[index] });
 
       return connectEndToStart(buildDataSet);
     }
@@ -26,7 +28,7 @@ export function createCompleteOutline(
       dataPairDifferenceX > acceptableDifference ||
       dataPairDifferenceY > acceptableDifference;
 
-    addToEnd(buildDataSet, { ...element, type: 'drawn' });
+    addToEnd(buildDataSet, { ...element });
 
     if (isBreakpoint) {
       const largestDifference = Math.max(
@@ -75,7 +77,7 @@ export function createCompleteOutline(
   return buildDataSet;
 }
 
-function connectEndToStart(buildDataSet: buildCoordinates[]) {
+function connectEndToStart(buildDataSet: coordinate[]) {
   const { offsetX: startX, offsetY: startY } = buildDataSet[0];
   const { offsetX: endX, offsetY: endY } = last(buildDataSet);
 
@@ -120,33 +122,24 @@ function connectEndToStart(buildDataSet: buildCoordinates[]) {
   return buildDataSet;
 }
 
-function addToEnd(buildArray: buildCoordinates[], toAdd: buildCoordinates) {
-  buildArray.push(toAdd);
-}
+export function excludeDrawnSegments(dataSet: coordinate[]) {
+  const dataSetCopy: coordinate[] = deepCopy(dataSet);
 
-function last(array: coordinate[]) {
-  return array[array.length - 1];
-}
+  const indexOfAll = (type: string) =>
+    dataSetCopy
+      .map(entry => {
+        if (entry.type == type) return dataSetCopy.indexOf(entry);
+      })
+      .filter(index => index !== undefined);
 
-function roundUp(number: number) {
-  return Math.ceil(number);
-}
+  const indexOfAllBeginDraw = indexOfAll('beginDraw');
+  const indexOfAllEndDraw = indexOfAll('endDraw');
 
-function roundDown(number: number) {
-  return Math.floor(number);
-}
+  indexOfAllBeginDraw.forEach(
+    (beginDrawIndex, index) =>
+      typeof beginDrawIndex == 'number' &&
+      dataSetCopy.splice(beginDrawIndex, indexOfAllEndDraw[index])
+  );
 
-export function average(numbers: number[]) {
-  return sum(numbers) / 2;
-}
-
-export function sum(numbers: number[]) {
-  let sum = 0;
-  numbers.map(x => (sum += x));
-
-  return sum;
-}
-
-function deepCopy(array: coordinate[]) {
-  return JSON.parse(JSON.stringify(array));
+  return dataSetCopy;
 }
