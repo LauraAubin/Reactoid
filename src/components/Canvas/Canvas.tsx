@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { canvasElement } from './types/types';
+import { canvasElement, toggleOptions } from '../../utilities/types';
 
 import autobind from 'autobind-decorator';
 
@@ -11,6 +11,7 @@ interface Props {
   height: number;
   lineColor: string;
   backgroundColor: string;
+  toggleDrawing: toggleOptions;
   setCanvasData(canvasData: any[]): void;
 }
 
@@ -60,7 +61,7 @@ export default class Canvas extends React.Component<Props, State> {
 
     canvasContext.lineJoin = 'round';
     canvasContext.lineCap = 'round';
-    canvasContext.lineWidth = 5;
+    canvasContext.lineWidth = 15;
   }
 
   render() {
