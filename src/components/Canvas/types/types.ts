@@ -1,7 +1,4 @@
-export type coordinate = {
+export type canvasElement = {
   offsetX: number;
   offsetY: number;
-  type: canvasTypes;
 };
-
-export type canvasTypes = 'beginDraw' | 'drawn' | 'endDraw' | 'generated';

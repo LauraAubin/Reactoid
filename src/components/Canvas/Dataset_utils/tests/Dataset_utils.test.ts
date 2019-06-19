@@ -1,5 +1,5 @@
 import { createCompleteOutline, excludeDrawnSegments } from '../Dataset_utils';
-import { canvasTypes } from '../../types/types';
+import { canvasTypes } from '../Dataset_utils';
 import { last } from '../../../../utilities/arrays';
 
 describe('createCompleteOutline', () => {

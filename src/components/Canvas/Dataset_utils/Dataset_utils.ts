@@ -1,6 +1,10 @@
-import { canvasTypes, coordinate } from '../types/types';
+// LEGACY
+
 import { addToEnd, last, deepCopy } from '../../../utilities/arrays';
 import { average, roundUp } from '../../../utilities/math';
+
+export type canvasTypes = 'beginDraw' | 'drawn' | 'endDraw' | 'generated';
+type coordinate = { offsetX: number; offsetY: number; type: canvasTypes };
 
 export function createCompleteOutline(
   dataSet: coordinate[],

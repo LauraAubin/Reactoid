@@ -1,34 +1,25 @@
 import * as React from 'react';
 
-import { coordinate, canvasTypes } from './types/types';
-import {
-  createCompleteOutline,
-  onlyGeneratedCoodinates
-} from './Dataset_utils/Dataset_utils';
-import { interval } from '../../utilities/math';
+import { canvasElement } from './types/types';
 
 import autobind from 'autobind-decorator';
-import Dot from './Dot';
 
 import './Canvas.scss';
-
-const DOT_INTERVAL = 15;
 
 interface Props {
   width: number;
   height: number;
   lineColor: string;
   backgroundColor: string;
-  setOutline?(setOutline: coordinate[]): void;
+  setCanvasData(canvasData: any[]): void;
 }
 
 interface State {
   isPainting: boolean;
   canvas: any;
   canvasContext: any;
-  previousCoordinate: coordinate;
-  lineData: coordinate[];
-  outlineData: coordinate[];
+  previousCoordinate: canvasElement;
+  canvasData: canvasElement[];
 }
 
 export default class Canvas extends React.Component<Props, State> {
@@ -39,9 +30,8 @@ export default class Canvas extends React.Component<Props, State> {
       isPainting: false,
       canvas: undefined,
       canvasContext: undefined,
-      previousCoordinate: { offsetX: 0, offsetY: 0, type: 'generated' },
-      lineData: [],
-      outlineData: []
+      previousCoordinate: { offsetX: 0, offsetY: 0 },
+      canvasData: []
     };
   }
 
@@ -95,7 +85,7 @@ export default class Canvas extends React.Component<Props, State> {
 
     this.setState({
       isPainting: true,
-      previousCoordinate: { offsetX, offsetY, type: 'beginDraw' }
+      previousCoordinate: { offsetX, offsetY }
     });
   }
 
@@ -107,8 +97,7 @@ export default class Canvas extends React.Component<Props, State> {
       const { offsetX, offsetY } = nativeEvent;
       const currentCoordinate = {
         offsetX,
-        offsetY,
-        type: 'drawn' as canvasTypes
+        offsetY
       };
 
       this.addNewLineData();
@@ -118,24 +107,23 @@ export default class Canvas extends React.Component<Props, State> {
 
   @autobind
   endPaintEvent() {
-    const { isPainting } = this.state;
+    const { setCanvasData } = this.props;
+    const { isPainting, canvasData } = this.state;
 
-    // TODO - calculate completeOutline when launching the view page
     if (isPainting) {
-      this.setEndDraw().then(() =>
-        this.completeOutline().then(() => this.togglepainting())
-      );
+      this.togglepainting();
+      setCanvasData && setCanvasData(canvasData);
     }
   }
 
   addNewLineData() {
-    const { previousCoordinate, lineData } = this.state;
+    const { previousCoordinate, canvasData } = this.state;
 
-    this.setState({ lineData: lineData.concat({ ...previousCoordinate }) });
+    this.setState({ canvasData: canvasData.concat({ ...previousCoordinate }) });
   }
 
   @autobind
-  paint(previousCoordinate: coordinate, currentCoordinate: coordinate) {
+  paint(previousCoordinate: canvasElement, currentCoordinate: canvasElement) {
     const { canvas } = this.state;
     const { offsetX: currentX, offsetY: currentY } = currentCoordinate;
 
@@ -145,16 +133,15 @@ export default class Canvas extends React.Component<Props, State> {
       this.setState({
         previousCoordinate: {
           offsetX: currentX,
-          offsetY: currentY,
-          type: 'drawn'
+          offsetY: currentY
         }
       });
     }
   }
 
   drawLineSegment(
-    previousCoordinate: coordinate,
-    currentCoordinate: coordinate
+    previousCoordinate: canvasElement,
+    currentCoordinate: canvasElement
   ) {
     const { lineColor } = this.props;
     const { canvasContext } = this.state;
@@ -186,47 +173,5 @@ export default class Canvas extends React.Component<Props, State> {
     const { isPainting } = this.state;
 
     this.setState({ isPainting: !isPainting });
-  }
-
-  @autobind
-  async setEndDraw() {
-    const { previousCoordinate } = this.state;
-    const { offsetX, offsetY } = previousCoordinate;
-
-    this.setState(
-      {
-        previousCoordinate: { offsetX, offsetY, type: 'endDraw' }
-      },
-      () => this.addNewLineData()
-    );
-  }
-
-  @autobind
-  async completeOutline() {
-    const { setOutline } = this.props;
-    const { lineData } = this.state;
-
-    const outline = createCompleteOutline(lineData);
-
-    this.setState({ outlineData: outline });
-
-    onlyGeneratedCoodinates(outline).map(
-      ({ offsetX, offsetY }, index) =>
-        interval(index, DOT_INTERVAL) && this.drawDot(offsetX, offsetY)
-    );
-
-    setOutline && setOutline(outline);
-  }
-
-  drawDot(x: number, y: number) {
-    const { canvasContext } = this.state;
-
-    Dot({
-      canvasContext,
-      x: x,
-      y: y,
-      size: 2,
-      glowSize: 3
-    });
   }
 }
