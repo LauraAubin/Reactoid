@@ -125,21 +125,27 @@ function connectEndToStart(buildDataSet: coordinate[]) {
 export function excludeDrawnSegments(dataSet: coordinate[]) {
   const dataSetCopy: coordinate[] = deepCopy(dataSet);
 
-  const indexOfAll = (type: string) =>
-    dataSetCopy
-      .map(entry => {
-        if (entry.type == type) return dataSetCopy.indexOf(entry);
-      })
-      .filter(index => index !== undefined);
+  const matchType = (type: string) =>
+    filterForIndices(
+      dataSetCopy.map((entry, index) => entry.type == type && index)
+    );
 
-  const indexOfAllBeginDraw = indexOfAll('beginDraw');
-  const indexOfAllEndDraw = indexOfAll('endDraw');
+  const filterForIndices = (array: any[]) =>
+    array.filter(element => element !== false);
 
-  indexOfAllBeginDraw.forEach(
-    (beginDrawIndex, index) =>
-      typeof beginDrawIndex == 'number' &&
-      dataSetCopy.splice(beginDrawIndex, indexOfAllEndDraw[index])
-  );
+  const indexOfAllBegin = matchType('beginDraw');
+  const indexOfAllEnd = matchType('endDraw');
+
+  let spliceCounter = 0;
+
+  indexOfAllBegin.forEach((start, index) => {
+    let end = indexOfAllEnd[index];
+    const elementsToRemoveIncludingStart = end - start + 1;
+
+    dataSetCopy.splice(start - spliceCounter, elementsToRemoveIncludingStart);
+
+    spliceCounter += end;
+  });
 
   return dataSetCopy;
 }

@@ -185,4 +185,74 @@ describe('excludeDrawnSegments', () => {
 
     expect(excludeDrawnSegments(array)).toEqual(expectedArray);
   });
+
+  it('should remove everything between two sets of beginDraw and endDraw types inclusive', () => {
+    const array = [
+      {
+        offsetX: 1,
+        offsetY: 1,
+        type: 'generated' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 2,
+        type: 'beginDraw' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 3,
+        type: 'drawn' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 4,
+        type: 'endDraw' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 5,
+        type: 'drawn' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 4,
+        type: 'beginDraw' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 3,
+        type: 'drawn' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 2,
+        type: 'endDraw' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 1,
+        type: 'generated' as canvasTypes
+      },
+    ];
+
+    const expectedArray = [
+      {
+        offsetX: 1,
+        offsetY: 1,
+        type: 'generated' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 5,
+        type: 'drawn' as canvasTypes
+      },
+      {
+        offsetX: 1,
+        offsetY: 1,
+        type: 'generated' as canvasTypes
+      },
+    ];
+
+    expect(excludeDrawnSegments(array)).toEqual(expectedArray);
+  });
 });
