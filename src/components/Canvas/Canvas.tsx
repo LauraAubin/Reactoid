@@ -40,8 +40,8 @@ export default class Canvas extends React.Component<Props, State> {
     this.setState({ canvas: document.getElementById('canvas') });
   }
 
-  componentDidUpdate() {
-    const { width, height } = this.props;
+  componentDidUpdate(prevProps: Props) {
+    const { width, height, toggleDrawing } = this.props;
     const { canvas, canvasContext } = this.state;
 
     if (canvas && !canvasContext) {
@@ -53,6 +53,11 @@ export default class Canvas extends React.Component<Props, State> {
 
     if (canvasContext && canvasContext.lineWidth == 1) {
       this.setupCanvasProperties();
+    }
+
+    if (prevProps.toggleDrawing !== toggleDrawing) {
+      toggleDrawing == toggleOptions.Edit && this.show();
+      toggleDrawing == toggleOptions.View && this.clear();
     }
   }
 
@@ -81,13 +86,35 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   @autobind
+  clear() {
+    const { width, height } = this.props;
+    const { canvasContext } = this.state;
+
+    canvasContext.clearRect(0, 0, width, height);
+  }
+
+  @autobind
+  show() {
+    const { canvasData } = this.state;
+
+    canvasData.map((element, index) => {
+      if (index == 0) return;
+
+      this.paint(canvasData[index - 1], element);
+    });
+  }
+
+  @autobind
   onMouseDown({ nativeEvent }: any) {
+    const { toggleDrawing } = this.props;
     const { offsetX, offsetY } = nativeEvent;
 
-    this.setState({
-      isPainting: true,
-      previousCoordinate: { offsetX, offsetY }
-    });
+    if (toggleDrawing == toggleOptions.Edit) {
+      this.setState({
+        isPainting: true,
+        previousCoordinate: { offsetX, offsetY }
+      });
+    }
   }
 
   @autobind

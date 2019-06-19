@@ -1,5 +1,7 @@
 ## Reactoid
 
+**What is the point?** To make something neat that serves no purpose other than for the goof.
+
 ### Development
 
 👋 Remember to initially run `npm install` to generate `node_modules`
