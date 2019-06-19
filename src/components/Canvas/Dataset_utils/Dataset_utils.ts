@@ -35,23 +35,20 @@ export function createCompleteOutline(
         dataPairDifferenceX,
         dataPairDifferenceY
       );
-      const loopTimes = largestDifference - 1;
 
-      [...Array(loopTimes).keys()].forEach(index => {
+      [...Array(largestDifference - 1).keys()].forEach(index => {
         const determineIndexDirection = (
           start: number,
           end: number,
           modifier: number = start
         ) => (start < end ? modifier + index : modifier - index);
 
-        const determineOffsetDirection = (start: number, end: number) =>
-          start < end
-            ? determineIndexDirection(start, end) + 1
-            : determineIndexDirection(start, end) - 1;
+        const determineNextPoint = (first: number, second: number) =>
+          first < second ? first + index + 1 : first - index - 1;
 
         dataPairDifferenceX > dataPairDifferenceY
           ? addToEnd(buildDataSet, {
-              offsetX: determineOffsetDirection(firstX, secondX),
+              offsetX: determineNextPoint(firstX, secondX),
               offsetY: roundUp(
                 average([
                   determineIndexDirection(firstY, secondY),
@@ -67,7 +64,7 @@ export function createCompleteOutline(
                   determineIndexDirection(firstX, secondX, secondX)
                 ])
               ),
-              offsetY: determineOffsetDirection(firstY, secondY),
+              offsetY: determineNextPoint(firstY, secondY),
               type: 'generated'
             });
       });
@@ -89,30 +86,32 @@ function connectEndToStart(buildDataSet: coordinate[]) {
 
   const loopTimes = largestDifference - 1;
 
-  [...Array(loopTimes).keys()].forEach(() => {
-    const determineOffsetDirection = (
-      start: number,
-      end: number,
-      offset: number
-    ) => (start > end ? offset + 1 : offset - 1);
+  [...Array(loopTimes).keys()].forEach(index => {
+    const determineNextPoint = (start: number, end: number, newLast: number) =>
+      start > end ? newLast + 1 : newLast - 1;
 
-    const determineNextOffset = (
-      difference: number,
-      nextOffsetValue: number,
-      startValue: number
-    ) => (difference == largestDifference ? nextOffsetValue : startValue);
+    const generateForX = differenceX == largestDifference;
+
+    const differenceOfNonGenerators = generateForX
+      ? Math.abs(startY - endY)
+      : Math.abs(startX - endX);
+
+    const numberOfGenerators = generateForX ? endX - 1 : endY - 1;
+
+    const interval = roundUp(
+      (differenceOfNonGenerators / numberOfGenerators) * index
+    );
+
+    const nextInterval = (start: number, end: number) =>
+      start > end ? end + interval : end - interval;
 
     const toAdd = {
-      offsetX: determineNextOffset(
-        differenceX,
-        determineOffsetDirection(startX, endX, last(buildDataSet).offsetX),
-        startX
-      ),
-      offsetY: determineNextOffset(
-        differenceY,
-        determineOffsetDirection(startY, endY, last(buildDataSet).offsetY),
-        startY
-      ),
+      offsetX: generateForX
+        ? determineNextPoint(startX, endX, last(buildDataSet).offsetX)
+        : nextInterval(startX, endX),
+      offsetY: !generateForX
+        ? determineNextPoint(startY, endY, last(buildDataSet).offsetY)
+        : nextInterval(startY, endY),
       type: 'generated' as canvasTypes
     };
 
@@ -140,9 +139,12 @@ export function excludeDrawnSegments(dataSet: coordinate[]) {
 
   indexOfAllBegin.forEach((start, index) => {
     let end = indexOfAllEnd[index];
-    const elementsToRemoveIncludingStart = end - start + 1;
+    const numberOfElementsToRemoveIncludingStart = end - start + 1;
 
-    dataSetCopy.splice(start - spliceCounter, elementsToRemoveIncludingStart);
+    dataSetCopy.splice(
+      start - spliceCounter,
+      numberOfElementsToRemoveIncludingStart
+    );
 
     spliceCounter += end;
   });
