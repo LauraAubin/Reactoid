@@ -11,29 +11,51 @@ import Canvas from '../../components/Canvas';
 import Toggle from '../../components/Toggle';
 
 interface State {
-  canvasData: canvasElement[];
+  canvasData: canvasElement[][];
   toggleDrawing: toggleOptions;
+  undo: number;
+  disableUndo: boolean;
 }
 
 export default class Draw extends React.Component<{}, State> {
   constructor(state: State) {
     super(state);
-    this.state = { canvasData: [], toggleDrawing: toggleOptions.Edit };
+    this.state = {
+      canvasData: [],
+      toggleDrawing: toggleOptions.Edit,
+      undo: 0,
+      disableUndo: true
+    };
+  }
+
+  componentDidUpdate() {
+    const { canvasData, disableUndo } = this.state;
+
+    const checkForEmptyArray = canvasData.length == 0;
+
+    if (disableUndo !== checkForEmptyArray) {
+      this.setState({ disableUndo: checkForEmptyArray });
+    }
   }
 
   public render() {
-    const { toggleDrawing } = this.state;
+    const { toggleDrawing, undo, disableUndo } = this.state;
 
     return (
       <div className={css(Animations.growFromBottomLeft)}>
         <Canvas
-          width={1000}
+          width={800}
           height={500}
           lineColor={YELLOW}
           backgroundColor={PURPLE}
           setCanvasData={this.setCanvasData}
           toggleDrawing={toggleDrawing}
+          undo={undo}
         />
+        <button onClick={this.undo} disabled={disableUndo}>
+          Undo
+        </button>
+        <br />
         Show result
         <Toggle onChange={this.toggle} />
         Back to drawing
@@ -46,7 +68,7 @@ export default class Draw extends React.Component<{}, State> {
   }
 
   @autobind
-  setCanvasData(canvasData: canvasElement[]) {
+  setCanvasData(canvasData: canvasElement[][]) {
     this.setState({ canvasData });
   }
 
@@ -60,5 +82,12 @@ export default class Draw extends React.Component<{}, State> {
           ? toggleOptions.View
           : toggleOptions.Edit
     });
+  }
+
+  @autobind
+  undo() {
+    const { undo } = this.state;
+
+    this.setState({ undo: undo + 1 });
   }
 }

@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { canvasElement, toggleOptions } from '../../utilities/types';
+import { last } from '../../utilities/arrays';
 
 import autobind from 'autobind-decorator';
 
@@ -12,6 +13,7 @@ interface Props {
   lineColor: string;
   backgroundColor: string;
   toggleDrawing: toggleOptions;
+  undo: number;
   setCanvasData(canvasData: any[]): void;
 }
 
@@ -19,8 +21,8 @@ interface State {
   isPainting: boolean;
   canvas: any;
   canvasContext: any;
-  previousCoordinate: canvasElement;
-  canvasData: canvasElement[];
+  currentCanvasData: canvasElement[];
+  canvasData: canvasElement[][];
 }
 
 export default class Canvas extends React.Component<Props, State> {
@@ -31,7 +33,7 @@ export default class Canvas extends React.Component<Props, State> {
       isPainting: false,
       canvas: undefined,
       canvasContext: undefined,
-      previousCoordinate: { offsetX: 0, offsetY: 0 },
+      currentCanvasData: [],
       canvasData: []
     };
   }
@@ -41,8 +43,8 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { width, height, toggleDrawing } = this.props;
-    const { canvas, canvasContext } = this.state;
+    const { width, height, toggleDrawing, undo } = this.props;
+    const { canvas, canvasContext, canvasData } = this.state;
 
     if (canvas && !canvasContext) {
       canvas.width = width;
@@ -56,8 +58,16 @@ export default class Canvas extends React.Component<Props, State> {
     }
 
     if (prevProps.toggleDrawing !== toggleDrawing) {
-      toggleDrawing == toggleOptions.Edit && this.show();
+      toggleDrawing == toggleOptions.Edit && this.repaint();
       toggleDrawing == toggleOptions.View && this.clear();
+    }
+
+    if (prevProps.undo !== undo) {
+      canvasData.pop();
+      this.setState({ canvasData });
+
+      this.clear();
+      this.repaint();
     }
   }
 
@@ -94,32 +104,38 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   @autobind
-  show() {
+  repaint() {
     const { canvasData } = this.state;
 
-    canvasData.map((element, index) => {
-      if (index == 0) return;
+    canvasData.map((arrayElement: canvasElement[]) => {
+      arrayElement.map((element, index) => {
+        if (index == 0) return;
 
-      this.paint(canvasData[index - 1], element);
+        const previousElement = arrayElement[index - 1];
+
+        this.paint(previousElement, element);
+      });
     });
   }
 
   @autobind
   onMouseDown({ nativeEvent }: any) {
     const { toggleDrawing } = this.props;
+    const { currentCanvasData } = this.state;
+
     const { offsetX, offsetY } = nativeEvent;
 
     if (toggleDrawing == toggleOptions.Edit) {
       this.setState({
         isPainting: true,
-        previousCoordinate: { offsetX, offsetY }
+        currentCanvasData: currentCanvasData.concat({ offsetX, offsetY })
       });
     }
   }
 
   @autobind
   onMouseMove({ nativeEvent }: any) {
-    const { isPainting, previousCoordinate } = this.state;
+    const { isPainting, currentCanvasData } = this.state;
 
     if (isPainting) {
       const { offsetX, offsetY } = nativeEvent;
@@ -128,42 +144,48 @@ export default class Canvas extends React.Component<Props, State> {
         offsetY
       };
 
-      this.addNewLineData();
-      this.paint(previousCoordinate, currentCoordinate);
+      this.paint(last(currentCanvasData), currentCoordinate);
+
+      const { offsetX: currentX, offsetY: currentY } = currentCoordinate;
+
+      this.setState({
+        currentCanvasData: currentCanvasData.concat({
+          offsetX: currentX,
+          offsetY: currentY
+        })
+      });
     }
   }
 
   @autobind
   endPaintEvent() {
-    const { setCanvasData } = this.props;
-    const { isPainting, canvasData } = this.state;
+    const { isPainting } = this.state;
 
     if (isPainting) {
+      this.addNewLineData();
       this.togglepainting();
-      setCanvasData && setCanvasData(canvasData);
     }
   }
 
   addNewLineData() {
-    const { previousCoordinate, canvasData } = this.state;
+    const { setCanvasData } = this.props;
+    const { currentCanvasData, canvasData } = this.state;
 
-    this.setState({ canvasData: canvasData.concat({ ...previousCoordinate }) });
+    this.setState(
+      {
+        canvasData: canvasData.concat([currentCanvasData]),
+        currentCanvasData: []
+      },
+      () => setCanvasData && setCanvasData(this.state.canvasData)
+    );
   }
 
   @autobind
   paint(previousCoordinate: canvasElement, currentCoordinate: canvasElement) {
     const { canvas } = this.state;
-    const { offsetX: currentX, offsetY: currentY } = currentCoordinate;
 
     if (canvas) {
       this.drawLineSegment(previousCoordinate, currentCoordinate);
-
-      this.setState({
-        previousCoordinate: {
-          offsetX: currentX,
-          offsetY: currentY
-        }
-      });
     }
   }
 
