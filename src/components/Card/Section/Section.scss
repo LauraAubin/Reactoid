@@ -1,0 +1,15 @@
+@import '../../../globalStyles/colors.scss';
+@import '../../../globalStyles/spacing.scss';
+
+.Section {
+  border-bottom: color(sky) 1px solid;
+  padding: spacing(tight);
+}
+
+.Subdued {
+  background: color(sky, light);
+}
+
+.NoPadding {
+  padding: 0;
+}

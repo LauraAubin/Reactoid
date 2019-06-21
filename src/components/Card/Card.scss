@@ -1,0 +1,9 @@
+@import '../../globalStyles/shadow.scss';
+@import '../../globalStyles/colors.scss';
+@import '../../globalStyles/spacing.scss';
+
+.Card {
+  box-shadow: shadow(color(sky));
+  border-radius: spacing(extraTight);
+  background: white;
+}
