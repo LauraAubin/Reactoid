@@ -1,19 +1,16 @@
 import * as React from 'react';
 
-export interface Props {
+interface Props {
   color?: string;
+  children: any;
 }
 
-export default class Heading extends React.Component<Props, any> {
-  public render() {
-    const { children, color = 'black' } = this.props;
+export default function Heading({ color, children }: Props) {
+  const colorStyle = {
+    color: color = color,
+    fontSize: '16px',
+    fontWeight: 600
+  };
 
-    const colorStyle = {
-      color: color,
-      fontSize: '16px',
-      fontWeight: 600
-    };
-
-    return <div style={colorStyle}>{children}</div>;
-  }
+  return <div style={colorStyle}>{children}</div>;
 }

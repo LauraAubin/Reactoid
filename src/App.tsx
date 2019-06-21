@@ -1,10 +1,11 @@
 import * as React from 'react';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import { AppProvider, Page } from '@shopify/polaris';
-import { PURPLE } from './globalStyles/colors';
+import { AppProvider } from '@shopify/polaris';
+import { PURPLE } from './globalStyles/themeColors';
 
 import GithubCorner from 'react-github-corner';
+import Page from './components/Page';
 
 import EmptyState from './pages/EmptyState';
 import Draw from './pages/Draw';
@@ -16,7 +17,7 @@ class App extends React.Component {
     return (
       <Router>
         <AppProvider>
-          <Page title=''>
+          <Page>
             <GithubCorner
               href='https://github.com/LauraAubin/Reactoid'
               bannerColor={PURPLE}
