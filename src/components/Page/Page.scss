@@ -1,0 +1,13 @@
+@import '../../globalStyles/spacing.scss';
+@import '../../globalStyles/colors.scss';
+
+.Page {
+  height: 100vh;
+  background: color(sky, light);
+}
+
+.PageContent {
+  padding: 40px;
+  margin: 0 auto;
+  max-width: 100rem;
+}
