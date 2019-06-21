@@ -1,0 +1,16 @@
+.Stack {
+  display: flex;
+  height: 100%;
+}
+
+.HorizontalFlexEnd {
+  justify-content: flex-end;
+}
+
+.HorizontalCenter {
+  justify-content: center;
+}
+
+.VerticalCenter {
+  align-items: center;
+}
