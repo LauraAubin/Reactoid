@@ -1,4 +1,5 @@
 // LEGACY
+// This code isn't being used and only existed to experiment with
 
 import { addToEnd, last, deepCopy } from '../../../utilities/arrays';
 import { average, roundUp } from '../../../utilities/math';

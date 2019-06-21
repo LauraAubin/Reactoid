@@ -1,4 +1,5 @@
-@import "../../globalStyles/colors.scss";
+@import '../../globalStyles/colors.scss';
+@import '../../globalStyles/shadow.scss';
 
 $switch-width: 60px;
 $slider-padding: 4px;
@@ -6,10 +7,6 @@ $slider-size: 26px;
 $slider-translation: $switch-width - $slider-size - ($slider-padding * 2);
 
 $transition: 0.5s;
-
-@mixin BoxShadow($borderColor, $GlowColor) {
-  box-shadow: 0 0 0 1px $borderColor, 0 1px 4px 0 $GlowColor;
-}
 
 .Switch {
   position: relative;
@@ -38,12 +35,11 @@ $transition: 0.5s;
   border-radius: 34px;
   background: color(sky, dark);
   transition: $transition;
-
-  @include BoxShadow(color(sky), color(ink, lightest));
+  box-shadow: shadow(color(sky, dark));
 }
 
 .Slider:before {
-  content: "";
+  content: '';
   position: absolute;
   background: white;
   border-radius: 50%;
@@ -52,15 +48,15 @@ $transition: 0.5s;
   left: $slider-padding;
   bottom: $slider-padding;
   transition: $transition;
-
-  @include BoxShadow(color(sky, dark), color(ink, lightest));
+  box-shadow: shadow(color(sky, dark));
 }
 
-input:Checked + .Slider {
+input:checked + .Slider {
   background: color(purple);
 }
 
-input:Checked + .Slider:before {
-  transform: translateX($slider-translation);
+input:checked + .Slider:before {
   background: color(yellow);
+  transform: translateX($slider-translation);
+  box-shadow: shadow(color(ink, lighter));
 }
