@@ -3,12 +3,14 @@ import * as React from 'react';
 import { css } from 'aphrodite';
 import { Link } from 'react-router-dom';
 import { Animations } from '../../animations/animations';
-import { PURPLE, YELLOW } from '../../globalStyles/colors';
+import { PURPLE, YELLOW } from '../../globalStyles/themeColors';
 import { canvasElement, toggleOptions } from '../../utilities/types';
 
 import autobind from 'autobind-decorator';
 import Canvas from '../../components/Canvas';
 import Toggle from '../../components/Toggle';
+import Card from '../../components/Card';
+import Stack from '../../components/Stack';
 
 interface State {
   canvasData: canvasElement[][];
@@ -43,26 +45,34 @@ export default class Draw extends React.Component<{}, State> {
 
     return (
       <div className={css(Animations.growFromBottomLeft)}>
-        <Canvas
-          width={800}
-          height={500}
-          lineColor={YELLOW}
-          backgroundColor={PURPLE}
-          setCanvasData={this.setCanvasData}
-          toggleDrawing={toggleDrawing}
-          undo={undo}
-        />
-        <button onClick={this.undo} disabled={disableUndo}>
-          Undo
-        </button>
-        <br />
-        Show result
-        <Toggle onChange={this.toggle} />
-        Back to drawing
-        <br />
-        <Link to='/'>Home</Link>
-        <br />
-        <Link to='/view/'>View</Link>
+        <Card>
+          <Card.Section subdued>
+            <Stack distribution='trailing' alignment='center'>
+              <Toggle onChange={this.toggle} />
+            </Stack>
+          </Card.Section>
+
+          <Card.Section noPadding>
+            <Stack distribution='center'>
+              <Canvas
+                width={800}
+                height={500}
+                lineColor={YELLOW}
+                backgroundColor={PURPLE}
+                setCanvasData={this.setCanvasData}
+                toggleDrawing={toggleDrawing}
+                undo={undo}
+              />
+            </Stack>
+          </Card.Section>
+
+          <button onClick={this.undo} disabled={disableUndo}>
+            Undo
+          </button>
+          <Link to='/'>Home</Link>
+          <br />
+          <Link to='/view/'>View</Link>
+        </Card>
       </div>
     );
   }
