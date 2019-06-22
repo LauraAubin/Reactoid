@@ -55,7 +55,7 @@ export default class Draw extends React.Component<{}, State> {
           <Card.Section noPadding>
             <Stack distribution='center'>
               <Canvas
-                width={800}
+                width={920}
                 height={500}
                 lineColor={YELLOW}
                 backgroundColor={PURPLE}

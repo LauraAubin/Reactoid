@@ -43,7 +43,7 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { width, height, toggleDrawing, undo } = this.props;
+    const { width, height, undo } = this.props;
     const { canvas, canvasContext, canvasData } = this.state;
 
     if (canvas && !canvasContext) {
@@ -55,11 +55,6 @@ export default class Canvas extends React.Component<Props, State> {
 
     if (canvasContext && canvasContext.lineWidth == 1) {
       this.setupCanvasProperties();
-    }
-
-    if (prevProps.toggleDrawing !== toggleDrawing) {
-      toggleDrawing == toggleOptions.Edit && this.repaint();
-      toggleDrawing == toggleOptions.View && this.clear();
     }
 
     if (prevProps.undo !== undo) {
