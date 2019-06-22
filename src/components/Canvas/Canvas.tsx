@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { canvasElement, toggleOptions } from '../../utilities/types';
+import { canvasElement } from '../../utilities/types';
 import { last } from '../../utilities/arrays';
 
 import autobind from 'autobind-decorator';
@@ -12,7 +12,7 @@ interface Props {
   height: number;
   lineColor: string;
   backgroundColor: string;
-  toggleDrawing: toggleOptions;
+  toggle: boolean;
   undo: number;
   setCanvasData(canvasData: any[]): void;
 }
@@ -115,17 +115,14 @@ export default class Canvas extends React.Component<Props, State> {
 
   @autobind
   onMouseDown({ nativeEvent }: any) {
-    const { toggleDrawing } = this.props;
     const { currentCanvasData } = this.state;
 
     const { offsetX, offsetY } = nativeEvent;
 
-    if (toggleDrawing == toggleOptions.Edit) {
-      this.setState({
-        isPainting: true,
-        currentCanvasData: currentCanvasData.concat({ offsetX, offsetY })
-      });
-    }
+    this.setState({
+      isPainting: true,
+      currentCanvasData: currentCanvasData.concat({ offsetX, offsetY })
+    });
   }
 
   @autobind

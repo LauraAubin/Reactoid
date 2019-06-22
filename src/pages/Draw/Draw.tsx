@@ -4,7 +4,7 @@ import { css } from 'aphrodite';
 import { Link } from 'react-router-dom';
 import { Animations } from '../../animations/animations';
 import { PURPLE, YELLOW } from '../../globalStyles/themeColors';
-import { canvasElement, toggleOptions } from '../../utilities/types';
+import { canvasElement } from '../../utilities/types';
 
 import autobind from 'autobind-decorator';
 import Canvas from '../../components/Canvas';
@@ -14,7 +14,7 @@ import Stack from '../../components/Stack';
 
 interface State {
   canvasData: canvasElement[][];
-  toggleDrawing: toggleOptions;
+  toggle: boolean;
   undo: number;
   disableUndo: boolean;
 }
@@ -24,7 +24,7 @@ export default class Draw extends React.Component<{}, State> {
     super(state);
     this.state = {
       canvasData: [],
-      toggleDrawing: toggleOptions.Edit,
+      toggle: false,
       undo: 0,
       disableUndo: true
     };
@@ -41,7 +41,7 @@ export default class Draw extends React.Component<{}, State> {
   }
 
   public render() {
-    const { toggleDrawing, undo, disableUndo } = this.state;
+    const { toggle, undo, disableUndo } = this.state;
 
     return (
       <div className={css(Animations.growFromBottomLeft)}>
@@ -60,7 +60,7 @@ export default class Draw extends React.Component<{}, State> {
                 lineColor={YELLOW}
                 backgroundColor={PURPLE}
                 setCanvasData={this.setCanvasData}
-                toggleDrawing={toggleDrawing}
+                toggle={toggle}
                 undo={undo}
               />
             </Stack>
@@ -84,13 +84,10 @@ export default class Draw extends React.Component<{}, State> {
 
   @autobind
   toggle() {
-    const { toggleDrawing } = this.state;
+    const { toggle } = this.state;
 
     this.setState({
-      toggleDrawing:
-        toggleDrawing == toggleOptions.Edit
-          ? toggleOptions.View
-          : toggleOptions.Edit
+      toggle: !toggle
     });
   }
 
