@@ -1,5 +1,7 @@
 import * as React from 'react';
 
+import { css } from 'aphrodite';
+import { Animations } from '../../animations/animations';
 import { DisplayText } from '@shopify/polaris';
 import { PURPLE, YELLOW } from '../../globalStyles/themeColors';
 
@@ -10,7 +12,7 @@ import './Home.scss';
 
 export default function Home() {
   return (
-    <>
+    <div className={css(Animations.growFromCenter)}>
       <DisplayText size='medium'>
         How would you like to build your character?
       </DisplayText>
@@ -28,6 +30,6 @@ export default function Home() {
           <Heading color={YELLOW}>Use existing</Heading>
         </div>
       </div>
-    </>
+    </div>
   );
 }

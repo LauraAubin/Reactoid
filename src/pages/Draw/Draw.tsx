@@ -47,7 +47,7 @@ export default class Draw extends React.Component<{}, State> {
     const { toggle, undo, disableUndo } = this.state;
 
     return (
-      <div className={css(Animations.growFromBottomLeft)}>
+      <div className={css(Animations.slideInFromBottom)}>
         <Grid columns={`1fr ${CANVAS_WIDTH}px`} rows={`${CANVAS_HEIGHT}px 1fr`}>
           <Grid.Section
             spanColumns={{ start: 1, end: 2 }}
