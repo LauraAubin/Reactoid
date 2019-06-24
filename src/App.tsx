@@ -21,6 +21,7 @@ class App extends React.Component {
             <GithubCorner
               href='https://github.com/LauraAubin/Reactoid'
               bannerColor={PURPLE}
+              octoColor='#F4F6F8' // (sky, light)
               size={100}
             />
             <Switch>
