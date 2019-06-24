@@ -3,6 +3,8 @@
 @import '../../globalStyles/spacing.scss';
 
 .Card {
+  width: 100%;
+  height: 100%;
   box-shadow: shadow(color(sky));
   border-radius: spacing(extraTight);
   background: white;
