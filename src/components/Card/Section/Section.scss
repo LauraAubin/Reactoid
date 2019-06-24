@@ -2,6 +2,8 @@
 @import '../../../globalStyles/spacing.scss';
 
 .Section {
+  width: 100%;
+  height: 100%;
   border-bottom: color(sky) 1px solid;
   padding: spacing(tight);
 }

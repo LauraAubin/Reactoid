@@ -8,9 +8,12 @@ import { canvasElement } from '../../utilities/types';
 
 import autobind from 'autobind-decorator';
 import Canvas from '../../components/Canvas';
-import Toggle from '../../components/Toggle';
 import Card from '../../components/Card';
+import Grid from '../../components/Grid';
 import Stack from '../../components/Stack';
+
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 500;
 
 interface State {
   canvasData: canvasElement[][];
@@ -45,34 +48,55 @@ export default class Draw extends React.Component<{}, State> {
 
     return (
       <div className={css(Animations.growFromBottomLeft)}>
-        <Card>
-          <Card.Section subdued>
-            <Stack distribution='trailing' alignment='center'>
-              <Toggle onChange={this.toggle} />
-            </Stack>
-          </Card.Section>
+        <Grid columns={`1fr ${CANVAS_WIDTH}px`} rows={`${CANVAS_HEIGHT}px 1fr`}>
+          <Grid.Section
+            spanColumns={{ start: 1, end: 2 }}
+            spanRows={{ start: 1, end: 2 }}
+          >
+            <Card openEdges={['left']}>
+              <Card.Section>tools</Card.Section>
+            </Card>
+          </Grid.Section>
 
-          <Card.Section noPadding>
-            <Stack distribution='center'>
-              <Canvas
-                width={920}
-                height={500}
-                lineColor={YELLOW}
-                backgroundColor={PURPLE}
-                setCanvasData={this.setCanvasData}
-                toggle={toggle}
-                undo={undo}
-              />
-            </Stack>
-          </Card.Section>
+          <Grid.Section
+            spanColumns={{ start: 2, end: 3 }}
+            spanRows={{ start: 1, end: 2 }}
+          >
+            <Card>
+              <Card.Section noPadding>
+                <Stack distribution='center'>
+                  <Canvas
+                    width={CANVAS_WIDTH}
+                    height={CANVAS_HEIGHT}
+                    lineColor={YELLOW}
+                    backgroundColor={PURPLE}
+                    setCanvasData={this.setCanvasData}
+                    toggle={toggle}
+                    undo={undo}
+                  />
+                </Stack>
+              </Card.Section>
+            </Card>
+          </Grid.Section>
 
-          <button onClick={this.undo} disabled={disableUndo}>
-            Undo
-          </button>
-          <Link to='/'>Home</Link>
-          <br />
-          <Link to='/view/'>View</Link>
-        </Card>
+          <Grid.Section
+            spanColumns={{ start: 2, end: 3 }}
+            spanRows={{ start: 2, end: 3 }}
+          >
+            <Card openEdges={['bottom']}>
+              <Card.Section>
+                <Stack distribution='center'>
+                  <button onClick={this.undo} disabled={disableUndo}>
+                    Undo
+                  </button>
+                  <Link to='/'>Home</Link>
+                  <br />
+                  <Link to='/view/'>View</Link>
+                </Stack>
+              </Card.Section>
+            </Card>
+          </Grid.Section>
+        </Grid>
       </div>
     );
   }

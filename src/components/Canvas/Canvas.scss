@@ -1,3 +1,6 @@
+@import '../../globalStyles/spacing.scss';
+
 .Canvas {
   cursor: pointer;
+  border-top-right-radius: spacing(extraTight);
 }
