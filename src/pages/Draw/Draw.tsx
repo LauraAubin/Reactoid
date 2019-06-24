@@ -12,8 +12,8 @@ import Card from '../../components/Card';
 import Grid from '../../components/Grid';
 import Stack from '../../components/Stack';
 
-const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 1000;
+const CANVAS_HEIGHT = 600;
 
 interface State {
   canvasData: canvasElement[][];
