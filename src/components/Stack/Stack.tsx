@@ -5,7 +5,9 @@ import classNames from 'classnames';
 import './Stack.scss';
 
 interface Props {
+  /* Horizontal alignment */
   distribution?: 'center' | 'trailing';
+  /* Vertical alignment */
   alignment?: 'center';
   children: any;
 }

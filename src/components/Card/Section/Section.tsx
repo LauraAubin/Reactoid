@@ -6,6 +6,7 @@ import './Section.scss';
 
 interface Props {
   subdued?: boolean;
+  /* Removes inner padding */
   noPadding?: boolean;
   children: any;
 }
