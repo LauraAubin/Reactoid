@@ -1,6 +1,16 @@
+@import '../../utilities/styles/spacing.scss';
+
 .Stack {
   display: flex;
   height: 100%;
+}
+
+.Stack__Item {
+  margin: spacing(tight);
+}
+
+.Vertical {
+  flex-direction: column;
 }
 
 .HorizontalFlexEnd {

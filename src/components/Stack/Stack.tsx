@@ -9,17 +9,33 @@ interface Props {
   distribution?: 'center' | 'trailing';
   /* Vertical alignment */
   alignment?: 'center';
-  children: any;
+  vertical?: boolean;
+  /* Defaults to 8px, spacing(tight) */
+  spacing?: 'none';
+  children: Object;
 }
 
-export default function Stack({ distribution, alignment, children }: Props) {
+export default function Stack({
+  distribution,
+  alignment,
+  vertical,
+  spacing,
+  children
+}: Props) {
   const classes = classNames(
     'Stack',
     distribution && Distribution(distribution),
-    alignment && Alignment(alignment)
+    alignment && Alignment(alignment),
+    vertical && 'Vertical'
   );
 
-  return <div className={classes}>{children}</div>;
+  return (
+    <div className={classes}>
+      {React.Children.map(children, child => (
+        <span className={spacing ? undefined : 'Stack__Item'}>{child}</span>
+      ))}
+    </div>
+  );
 }
 
 function Distribution(distribution: Props['distribution']) {
