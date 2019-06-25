@@ -6,7 +6,7 @@ import './Stack.scss';
 
 interface Props {
   /* Horizontal alignment */
-  distribution?: 'center' | 'trailing';
+  distribution?: 'center' | 'trailing' | 'spaceBetween';
   /* Vertical alignment */
   alignment?: 'center';
   vertical?: boolean;
@@ -41,6 +41,7 @@ export default function Stack({
 function Distribution(distribution: Props['distribution']) {
   if (distribution == 'trailing') return 'HorizontalFlexEnd';
   if (distribution == 'center') return 'HorizontalCenter';
+  if (distribution == 'spaceBetween') return 'HorizontalSpaceBetween';
 }
 
 function Alignment(alignment: Props['alignment']) {
