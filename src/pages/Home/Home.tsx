@@ -3,7 +3,7 @@ import * as React from 'react';
 import { css } from 'aphrodite';
 import { Animations } from '../../animations/animations';
 import { DisplayText } from '@shopify/polaris';
-import { PURPLE, YELLOW } from '../../globalStyles/themeColors';
+import { PURPLE, YELLOW } from '../../utilities/styles/themeColors';
 
 import Icon from '../../components/Icon';
 import Heading from '../../components/Typography/Heading';

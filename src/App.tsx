@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { AppProvider } from '@shopify/polaris';
-import { PURPLE } from './globalStyles/themeColors';
+import { PURPLE } from './utilities/styles/themeColors';
 
 import GithubCorner from 'react-github-corner';
 import Page from './components/Page';
