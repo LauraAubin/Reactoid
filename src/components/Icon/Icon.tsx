@@ -5,7 +5,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props {
-  name: 'book' | 'penguin' | 'folder' | 'paint';
+  name: 'book' | 'penguin' | 'folder' | 'paint' | 'undo';
   size?: 'small' | 'medium' | 'large';
   color?: string;
 }
@@ -54,6 +54,11 @@ export default class Icon extends React.Component<Props, State> {
     if (name == 'paint') {
       typeNotSetYet && this.setSolidType();
       return 'palette' as any;
+    }
+
+    if (name == 'undo') {
+      typeNotSetYet && this.setSolidType();
+      return 'undo' as any;
     }
 
     if (name == 'penguin') {

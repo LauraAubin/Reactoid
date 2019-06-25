@@ -2,7 +2,8 @@
 import {
   faBook as book,
   faFolderPlus as folder,
-  faPalette as paint
+  faPalette as paint,
+  faUndo as undo
 } from '@fortawesome/free-solid-svg-icons';
 import { faQq as penguin } from '@fortawesome/free-brands-svg-icons';
 
@@ -14,7 +15,8 @@ const icons: Icons = {
   book,
   folder,
   paint,
-  penguin
+  penguin,
+  undo
 };
 
 export function getIcon(name: any) {
