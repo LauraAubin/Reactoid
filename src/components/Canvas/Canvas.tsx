@@ -4,6 +4,7 @@ import { canvasElement } from '../../utilities/types';
 import { last } from '../../utilities/arrays';
 
 import autobind from 'autobind-decorator';
+import Undo from './components/Undo';
 
 import './Canvas.scss';
 
@@ -12,8 +13,6 @@ interface Props {
   height: number;
   lineColor: string;
   backgroundColor: string;
-  toggle: boolean;
-  undo: number;
   setCanvasData(canvasData: any[]): void;
 }
 
@@ -42,9 +41,9 @@ export default class Canvas extends React.Component<Props, State> {
     this.setState({ canvas: document.getElementById('canvas') });
   }
 
-  componentDidUpdate(prevProps: Props) {
-    const { width, height, undo } = this.props;
-    const { canvas, canvasContext, canvasData } = this.state;
+  componentDidUpdate() {
+    const { width, height } = this.props;
+    const { canvas, canvasContext } = this.state;
 
     if (canvas && !canvasContext) {
       canvas.width = width;
@@ -55,14 +54,6 @@ export default class Canvas extends React.Component<Props, State> {
 
     if (canvasContext && canvasContext.lineWidth == 1) {
       this.setupCanvasProperties();
-    }
-
-    if (prevProps.undo !== undo) {
-      canvasData.pop();
-      this.setState({ canvasData });
-
-      this.clear();
-      this.repaint();
     }
   }
 
@@ -75,19 +66,41 @@ export default class Canvas extends React.Component<Props, State> {
   }
 
   render() {
-    const { backgroundColor } = this.props;
+    const { backgroundColor, width } = this.props;
+    const { canvasData } = this.state;
+
+    const disableUndo = canvasData.length == 0;
+
+    const styles = {
+      width: width
+    };
 
     return (
-      <canvas
-        id='canvas'
-        style={{ background: backgroundColor }}
-        className='Canvas'
-        onMouseDown={this.onMouseDown}
-        onMouseLeave={this.endPaintEvent}
-        onMouseUp={this.endPaintEvent}
-        onMouseMove={this.onMouseMove}
-      />
+      <div style={styles} className='CanvasContainer'>
+        <Undo undo={this.undo} disableUndo={disableUndo} />
+
+        <canvas
+          id='canvas'
+          style={{ background: backgroundColor }}
+          className='Canvas'
+          onMouseDown={this.onMouseDown}
+          onMouseLeave={this.endPaintEvent}
+          onMouseUp={this.endPaintEvent}
+          onMouseMove={this.onMouseMove}
+        />
+      </div>
     );
+  }
+
+  @autobind
+  undo() {
+    const { canvasData } = this.state;
+
+    canvasData.pop();
+    this.setState({ canvasData });
+
+    this.clear();
+    this.repaint();
   }
 
   @autobind

@@ -1,6 +1,17 @@
 @import '../../utilities/styles/spacing.scss';
 
+.CanvasContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
 .Canvas {
   cursor: pointer;
   border-top-right-radius: spacing(extraTight);
+}
+
+.Undo {
+  position: absolute;
+  padding: spacing();
+  cursor: pointer;
 }
