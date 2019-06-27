@@ -1,0 +1,46 @@
+@import '../../../../utilities/styles/colors.scss';
+@import '../../../../utilities/styles/spacing.scss';
+@import '../../../../utilities/styles/shadow.scss';
+
+$skyDarkLighter: #d0d5db;
+$purpleDarkerLighter: #443a87;
+
+.Container {
+  padding: spacing(tight);
+}
+
+.Tool {
+  padding: spacing(tight);
+  border-radius: spacing(tight);
+  cursor: pointer;
+  font-weight: 600;
+  color: color(ink, lighter);
+  background: color(sky);
+  box-shadow: shadow(color(sky, dark));
+  user-select: none;
+
+  &:hover {
+    background: $skyDarkLighter;
+    box-shadow: shadow(color(sky, dark));
+  }
+
+  &:active {
+    background: color(sky, dark);
+    box-shadow: shadow(color(sky, darker));
+  }
+}
+
+.Tool--Selected {
+  color: white;
+  background: color(purple);
+  box-shadow: shadow(color(purple));
+
+  &:hover {
+    background: color(purple, dark);
+    box-shadow: shadow(color(purple, dark));
+  }
+
+  &:active {
+    background: $purpleDarkerLighter;
+  }
+}

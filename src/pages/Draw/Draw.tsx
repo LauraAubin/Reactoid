@@ -3,15 +3,15 @@ import * as React from 'react';
 import { css } from 'aphrodite';
 import { Button } from '@shopify/polaris';
 import { Animations } from '../../animations/animations';
-import { canvasElement } from '../../utilities/types';
+import { canvasElement, canvasTools } from '../../utilities/types';
 
 import autobind from 'autobind-decorator';
-import Card from '../../components/Card';
 import Grid from '../../components/Grid';
 import Stack from '../../components/Stack';
 import BackModal from './components/BackModal';
 import Footer from './components/Footer';
 import CanvasContainer from './components/CanvasContainer';
+import Tools from './components/Tools';
 
 const CANVAS_WIDTH = 1000;
 const CANVAS_HEIGHT = 600;
@@ -19,6 +19,7 @@ const CANVAS_HEIGHT = 600;
 interface State {
   canvasData: canvasElement[][];
   modalActive: boolean;
+  tool: canvasTools;
 }
 
 export default class Draw extends React.Component<{}, State> {
@@ -26,12 +27,13 @@ export default class Draw extends React.Component<{}, State> {
     super(state);
     this.state = {
       canvasData: [],
-      modalActive: false
+      modalActive: false,
+      tool: 'body'
     };
   }
 
   public render() {
-    const { modalActive } = this.state;
+    const { modalActive, tool } = this.state;
 
     return (
       <div className={css(Animations.slideInFromBottom)}>
@@ -50,9 +52,7 @@ export default class Draw extends React.Component<{}, State> {
               spanColumns={{ start: 1, end: 2 }}
               spanRows={{ start: 1, end: 2 }}
             >
-              <Card openEdges={['left']}>
-                <Card.Section>tools</Card.Section>
-              </Card>
+              <Tools tool={tool} currentCanvasTool={this.currentCanvasTool} />
             </Grid.Section>
 
             <Grid.Section
@@ -88,5 +88,10 @@ export default class Draw extends React.Component<{}, State> {
     const { modalActive } = this.state;
 
     this.setState({ modalActive: !modalActive });
+  }
+
+  @autobind
+  currentCanvasTool(tool: canvasTools) {
+    this.setState({ tool });
   }
 }

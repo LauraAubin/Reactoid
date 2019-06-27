@@ -10,6 +10,8 @@ interface Props {
   /* Vertical alignment */
   alignment?: 'center';
   vertical?: boolean;
+  /* Child spacing defaults to 16px, spacing()
+  Depends on vertical for padding direction */
   spacing?: 'none';
   children: Object;
 }
