@@ -10,7 +10,6 @@ interface Props {
   /* Vertical alignment */
   alignment?: 'center';
   vertical?: boolean;
-  /* Defaults to 8px, spacing(tight) */
   spacing?: 'none';
   children: Object;
 }
@@ -22,17 +21,22 @@ export default function Stack({
   spacing,
   children
 }: Props) {
-  const classes = classNames(
+  const stackClasses = classNames(
     'Stack',
     distribution && Distribution(distribution),
     alignment && Alignment(alignment),
     vertical && 'Vertical'
   );
 
+  const childClasses = classNames(
+    'Stack__Item',
+    spacing !== 'none' && childSpacing(vertical)
+  );
+
   return (
-    <div className={classes}>
+    <div className={stackClasses}>
       {React.Children.map(children, child => (
-        <span className={spacing ? undefined : 'Stack__Item'}>{child}</span>
+        <span className={childClasses}>{child}</span>
       ))}
     </div>
   );
@@ -46,4 +50,10 @@ function Distribution(distribution: Props['distribution']) {
 
 function Alignment(alignment: Props['alignment']) {
   if (alignment == 'center') return 'VerticalCenter';
+}
+
+function childSpacing(vertical?: boolean) {
+  return vertical
+    ? 'Stack__Item--VerticalSpacing'
+    : 'Stack__Item--HorizontalSpacing';
 }

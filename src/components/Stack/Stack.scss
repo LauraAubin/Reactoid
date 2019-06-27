@@ -6,7 +6,23 @@
 }
 
 .Stack__Item {
-  margin: spacing(tight);
+  width: 100%;
+}
+
+.Stack__Item--VerticalSpacing {
+  padding-bottom: spacing();
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.Stack__Item--HorizontalSpacing {
+  padding-right: spacing();
+
+  &:last-child {
+    padding-right: 0;
+  }
 }
 
 .Vertical {
