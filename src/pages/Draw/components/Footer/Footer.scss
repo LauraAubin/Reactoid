@@ -1,0 +1,32 @@
+@import '../../../../utilities/styles/colors.scss';
+@import '../../../../utilities/styles/spacing.scss';
+@import '../../../../utilities/styles/shadow.scss';
+
+$purpleDarkerLighter: #443a87;
+
+.Link {
+  color: white;
+  font-weight: 600;
+  font-size: spacing();
+  text-decoration: none;
+  user-select: none;
+}
+
+.ResultsButton {
+  width: 160px;
+  height: spacing(extraLoose);
+  margin: spacing(tight);
+  padding: spacing(tight);
+  border-radius: spacing(tight);
+  background: color(purple);
+  box-shadow: shadow(color(purple, dark));
+
+  &:hover {
+    background: color(purple, dark);
+    box-shadow: shadow(color(purple, dark));
+  }
+
+  &:active {
+    background: $purpleDarkerLighter;
+  }
+}

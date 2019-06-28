@@ -30,15 +30,12 @@ export default function Stack({
     vertical && 'Vertical'
   );
 
-  const childClasses = classNames(
-    'Stack__Item',
-    spacing !== 'none' && childSpacing(vertical)
-  );
+  const childClass = spacing !== 'none' ? childSpacing(vertical) : undefined;
 
   return (
     <div className={stackClasses}>
       {React.Children.map(children, child => (
-        <span className={childClasses}>{child}</span>
+        <span className={childClass}>{child}</span>
       ))}
     </div>
   );

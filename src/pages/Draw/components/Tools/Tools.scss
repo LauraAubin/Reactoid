@@ -19,7 +19,17 @@ $purpleDarkerLighter: #443a87;
   box-shadow: shadow(color(sky, dark));
   user-select: none;
 
+  $move-on-hover: 4px;
+  $transition: all ease-in-out 0.3s;
+
+  position: relative;
+  top: 0;
+  transition: $transition;
+
   &:hover {
+    top: -$move-on-hover;
+    transition: $transition;
+
     background: $skyDarkLighter;
     box-shadow: shadow(color(sky, dark));
   }
